@@ -1,0 +1,9 @@
+Bidirectional relationships must follow these rules:
+
+The inverse side must refer to its owning sideby using the mappedBy attribute
+The owning side may have the inversedBy attribute
+@ManyToOne is always the owning side of a bidirectional association
+@OneToMany is always the inverse side of a bidirectional association
+the owning side of a @OneToOne association is the entity with the table containing the foreign key
+The many side of many-to-one bidirectional relationships must not define the mappedBy attribute
+For many-to-many bidirectional relationships, either side may be the owning side
