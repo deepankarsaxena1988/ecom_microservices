@@ -1,0 +1,19 @@
+{
+	"namespace" : "com.ecom.productListUploadAVRO.dto",
+	"type" : "record",
+	"name" : "EcomProductListDTOAVRO",
+	"fields" : [
+		{
+			"name" : "zipFileName",
+			"type" : "string"
+		},
+		
+		{
+			"name" : "uploaded",
+			"type" : "string"
+		}
+		
+	]
+	
+	
+}
