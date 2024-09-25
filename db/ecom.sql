@@ -52,3 +52,8 @@ ADD domain varchar(200);
  select next_val from product_seq;
 
 delete from product_seq;
+
+
+SHOW DATABASES WHERE `Database` LIKE 'ecom%';
+
+SELECT plugin from mysql.user where User='root';

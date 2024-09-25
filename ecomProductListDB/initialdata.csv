@@ -1,0 +1,42 @@
+"id";"product_code";"product_desc_detail";"product_desc_heading";"product_img";"product_name";"domain";"product_rating"
+1;"Product_Code_1";"Product_Desc_Detail_1";"Product_Desc_Heading_1";"image_1";"T-Shirt";"Http://localhost/ecom";0.0
+2;"Product_Code_1";"Product_Desc_Detail_2";"Product_Desc_Heading_2";"image_2";"T-Shirt";"Http://localhost/ecom";2.5
+3;"Product_Code_2";"Product_Desc_Detail_3";"Product_Desc_Heading_3";"image_3";"T-Shirt";"Http://localhost/ecom";3.0
+4;"Product_Code_3";"Product_Desc_Detail_4";"Product_Desc_Heading_4";"image_4";"T-Shirt";"Http://localhost/ecom";4.1
+5;"Product_Code_1";"Product_Desc_Detail_5";"Product_Desc_Heading_5";"image_5";"T-Shirt";"Http://localhost/ecom";5.0
+6;"Product_Code_2";"Product_Desc_Detail_6";"Product_Desc_Heading_6";"image_6";"T-Shirt";"Http://localhost/ecom";3.2
+7;"Product_Code_3";"Product_Desc_Detail_7";"Product_Desc_Heading_7";"image_7";"T-Shirt";"Http://localhost/ecom";3.5
+
+
+
+
+insert into ecom_product (id,product_code,product_desc_detail,product_desc_heading,product_img,product_name,domain,product_rating)value(1,'Product_Code_1','Product_Desc_Detail_1','Product_Desc_Heading_1','image_1','T-Shirt','Http://localhost/ecom',0.0);
+
+insert into ecom_product (id,product_code,product_desc_detail,product_desc_heading,product_img,product_name,domain,product_rating)
+value(2,'Product_Code_2','Product_Desc_Detail_2','Product_Desc_Heading_2','image_2','T-Shirt','Http://localhost/ecom',0.0);
+
+insert into ecom_product (id,product_code,product_desc_detail,product_desc_heading,product_img,product_name,domain,product_rating)
+value(3,'Product_Code_3','Product_Desc_Detail_3','Product_Desc_Heading_3','image_3','T-Shirt','Http://localhost/ecom',0.0);
+
+insert into ecom_product (id,product_code,product_desc_detail,product_desc_heading,product_img,product_name,domain,product_rating)
+value(4,'Product_Code_4','Product_Desc_Detail_4','Product_Desc_Heading_4','image_4','T-Shirt','Http://localhost/ecom',0.0);
+insert into ecom_product (id,product_code,product_desc_detail,product_desc_heading,product_img,product_name,domain,product_rating)
+value(5,'Product_Code_5','Product_Desc_Detail_5','Product_Desc_Heading_5','image_5','T-Shirt','Http://localhost/ecom',0.0);
+
+insert into ecom_product (id,product_code,product_desc_detail,product_desc_heading,product_img,product_name,domain,product_rating)
+value(6,'Product_Code_6','Product_Desc_Detail_6','Product_Desc_Heading_6','image_6','T-Shirt','Http://localhost/ecom',0.0);
+
+insert into ecom_product (id,product_code,product_desc_detail,product_desc_heading,product_img,product_name,domain,product_rating)
+value(7,'Product_Code_7','Product_Desc_Detail_7','Product_Desc_Heading_7','image_7','T-Shirt','Http://localhost/ecom',0.0);
+
+
+
+
+insert into ecom_product_review (id,product_id,review_user_id,product_review_comment) 
+values(get_ecomProductReviewID_next_sequence(), 1,1,'Test comment insert 1');
+
+
+insert into ecom_product_review (id,product_id,review_user_id,product_review_comment) 
+values(get_ecomProductReviewID_next_sequence(), 1,2,'Test comment insert 2'),
+(get_ecomProductReviewID_next_sequence(), 1,3,'Test comment insert 3')
+,(get_ecomProductReviewID_next_sequence(), 1,4,'Test comment insert 4');

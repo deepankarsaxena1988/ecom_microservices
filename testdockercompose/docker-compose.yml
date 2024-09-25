@@ -1,0 +1,24 @@
+version: '3'
+services:
+  mysql:
+    image: mysqlimage:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: ecomProductDB
+      MYSQL_USER: ecomUser
+      MYSQL_PASSWORD: root123
+    networks:
+      - my_network
+
+  app:
+    image: myapplication
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_USER: ecomUser
+      DATABASE_PASSWORD: root123
+      DATABASE_NAME: ecomProductDB
+    networks:
+      - my_network
+
+networks:
+  my_network:
