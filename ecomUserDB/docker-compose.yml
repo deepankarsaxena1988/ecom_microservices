@@ -1,0 +1,16 @@
+services:
+  ecom-user-db:
+    build: .
+    container_name: ecom-user-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root@123
+      MYSQL_DATABASE: ecomUserDB
+      MYSQL_USER: ecomUser
+      MYSQL_PASSWORD: root@123
+    volumes:
+      - ecom_user_db_data:/var/lib/mysql
+
+volumes:
+  ecom_user_db_data:
