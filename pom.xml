@@ -28,6 +28,7 @@
         <module>kafkaProducer</module>
         <module>Product</module>
         <module>ProductReviews</module>
+        <module>ecomCheckOutService</module>
         <module>security/security</module>
     </modules>
 

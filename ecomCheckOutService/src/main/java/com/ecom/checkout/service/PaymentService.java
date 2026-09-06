@@ -4,11 +4,10 @@ import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import com.razorpay.Utils;
+import jakarta.annotation.PostConstruct;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 @Service
 public class PaymentService {
@@ -32,7 +31,7 @@ public class PaymentService {
         orderRequest.put("currency", currency);
         orderRequest.put("receipt", receipt);
         orderRequest.put("payment_capture", 1);
-        return client.Orders.create(orderRequest);
+        return client.Orders.create(orderRequest).toJson();
     }
 
     public boolean verifyWebhookSignature(String payload, String actualSignature, String secret) {
