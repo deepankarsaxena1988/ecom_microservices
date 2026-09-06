@@ -10,6 +10,7 @@ Quick start (maven):
 
 Razorpay (integration)
 - Configure razorpay.keyId and razorpay.keySecret via environment or config server (do NOT commit keys).
+- To use Config Server, run it and ensure it exposes properties for application name `ecomCheckOutService`, or set spring.config.import in application.properties (optional:configserver:http://host:8888).
 - POST /checkout with { cart: [...], amount: 123.45 } will create a Razorpay order when amount is provided (amount in rupees).
 - Webhook: POST /webhook/razorpay will receive webhook events; set webhook secret to verify signatures.
 
