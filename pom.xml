@@ -29,6 +29,8 @@
         <module>Product</module>
         <module>ProductReviews</module>
         <module>ecomCheckOutService</module>
+        <module>ecomAccountAddresses</module>
+        <module>ecomOrderSummary</module>
         <module>security/security</module>
     </modules>
 
