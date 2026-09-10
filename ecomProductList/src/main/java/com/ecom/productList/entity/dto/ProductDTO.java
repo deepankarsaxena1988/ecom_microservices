@@ -23,6 +23,8 @@ public class ProductDTO {
 	
 	BigDecimal productRating;
 
+	String categoryName;
+
 	
 
 	public BigDecimal getProductRating() {
@@ -31,6 +33,14 @@ public class ProductDTO {
 
 	public void setProductRating(BigDecimal productRating) {
 		this.productRating = productRating;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public String getDomain() {

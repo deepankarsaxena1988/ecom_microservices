@@ -34,6 +34,8 @@ public class ProductDetailDTO {
 	
 	BigDecimal productRating;
 
+	String categoryName;
+
 	
 	List<ProductReviewEntity> productReview;
 	 
@@ -50,6 +52,14 @@ public class ProductDetailDTO {
 
 	public void setProductRating(BigDecimal productRating) {
 		this.productRating = productRating;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public String getDomain() {
