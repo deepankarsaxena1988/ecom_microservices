@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -51,6 +53,13 @@ public class ProductEntity {
 	@Column(name = "product_rating")
 	BigDecimal productRating;
 
+	@Column(name = "product_category_id")
+	private Long productCategoryId;
+
+	@ManyToOne
+	@JoinColumn(name = "product_category_id", referencedColumnName = "category_id", insertable = false, updatable = false)
+	private ProductCategoryEntity productCategory;
+
 	
 
 	public BigDecimal getProductRating() {
@@ -59,6 +68,22 @@ public class ProductEntity {
 
 	public void setProductRating(BigDecimal productRating) {
 		this.productRating = productRating;
+	}
+
+	public ProductCategoryEntity getProductCategory() {
+		return productCategory;
+	}
+
+	public void setProductCategory(ProductCategoryEntity productCategory) {
+		this.productCategory = productCategory;
+	}
+
+	public Long getProductCategoryId() {
+		return productCategoryId;
+	}
+
+	public void setProductCategoryId(Long productCategoryId) {
+		this.productCategoryId = productCategoryId;
 	}
 
 	public String getDomain() {
@@ -115,6 +140,22 @@ public class ProductEntity {
 
 	public void setProductDescDetail(String productDescDetail) {
 		this.productDescDetail = productDescDetail;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductEntity{" +
+				"id=" + id +
+				", productCode='" + productCode + '\'' +
+				", productName='" + productName + '\'' +
+				", productImage='" + productImage + '\'' +
+				", productDescHeading='" + productDescHeading + '\'' +
+				", productDescDetail='" + productDescDetail + '\'' +
+				", domain='" + domain + '\'' +
+				", productRating=" + productRating +
+				", productCategoryId=" + productCategoryId +
+				", productCategory=" + (productCategory != null ? productCategory.getCategoryName() : null) +
+				'}';
 	}
 
 }

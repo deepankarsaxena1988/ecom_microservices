@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecom.productList.entity.ProductEntity;
+import com.ecom.productList.entity.dto.ProductDetailDTO;
+import com.ecom.productList.entity.dto.ProductDTO;
 import com.ecom.productList.service.ProductListService;
 
 @RestController
@@ -24,7 +25,7 @@ public class EcomProductListController {
 	
 	/* @CrossOrigin(origins = "*") */
 	@GetMapping(path = "/productList")
-	public List<ProductEntity> getProductList(){
+	public List<ProductDTO> getProductList(){
 		/*
 		 * HttpHeaders responseHeaders = new HttpHeaders();
 		 * 
@@ -42,7 +43,7 @@ public class EcomProductListController {
 	
 	
 	@GetMapping(path = "/productDetail/{productId}")
-	public Object getProductDetail(@PathVariable("productId") Long productId){
+	public ProductDetailDTO getProductDetail(@PathVariable("productId") Long productId){
 		/*
 		 * HttpHeaders responseHeaders = new HttpHeaders();
 		 * 
@@ -58,7 +59,7 @@ public class EcomProductListController {
 		
 		 
 		 
-		 return prodListService.getProductDetail(productId).get();
+		 return prodListService.getProductDetail(productId);
 	}
 
 }

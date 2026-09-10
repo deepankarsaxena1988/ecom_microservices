@@ -5,11 +5,14 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ecom.productList.entity.ProductDetailEntity;
 import com.ecom.productList.entity.ProductEntity;
 import com.ecom.productList.entity.dto.ProductDetailDTO;
+import com.ecom.productList.entity.dto.ProductDTO;
 import com.ecom.productList.reporsitory.ProductDetailRepository;
 import com.ecom.productList.reporsitory.ProductRepository;
 
@@ -28,14 +31,14 @@ public class ProductListService {
 	ModelMapper modelMapper=new ModelMapper();
 	 
 	 
-	public List<ProductEntity> getAllProducts(){
+	public List<ProductDTO> getAllProducts(){
 		List<ProductEntity> allProducts = productRepository.findAll();
 		System.out.println(allProducts);
-		return allProducts;
+		return allProducts.stream().map(this::convertProductEntityToDTO).toList();
 	}
 	
 	
-	public Optional getProductDetail(Long productId) {
+	public ProductDetailDTO getProductDetail(Long productId) {
 		/**
 		 * getReferenceById() :- return a proxy and can throw an exception when passed non-existing id, method uses fetch lazy hence when return from controller directly give   below exception
 		 * com.fasterxml.jackson.databind.exc.InvalidDefinitionException: No serializer found for class org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor and no properties discovered to create BeanSerializer
@@ -45,19 +48,32 @@ public class ProductListService {
 		 */
 		//ProductDetail productDetail = productDetailReporsitory.getReferenceById(productId);
 		Optional<ProductDetailEntity> productDetail = productDetailReporsitory.findById(productId);
-		//System.out.println(productDetail.get().getId()+" ");//+productDetail.getProductReview().size());
-		convertProductDetailEntityToDTO(productDetail.get());
-		return productDetail;
+		ProductDetailEntity productDetailEntity = productDetail
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+		return convertProductDetailEntityToDTO(productDetailEntity);
 		
 	}
 	
 	
 	
 	private ProductDetailDTO convertProductDetailEntityToDTO(ProductDetailEntity productDetailEntity) {
-		return  modelMapper.map(productDetailEntity, ProductDetailDTO.class);
+		ProductDetailDTO productDetailDTO = modelMapper.map(productDetailEntity, ProductDetailDTO.class);
+		if (productDetailEntity.getProductCategory() != null) {
+			productDetailDTO.setCategoryName(productDetailEntity.getProductCategory().getCategoryName());
+		}
+		return productDetailDTO;
 		//System.out.println(productDetailDTO.getId());
 		//System.out.println(productDetailDTO.getProductReview().size());
 		//return productDetailDTO;
+	}
+
+	private ProductDTO convertProductEntityToDTO(ProductEntity productEntity) {
+		System.out.println("product Entity"+productEntity);
+		ProductDTO productDTO = modelMapper.map(productEntity, ProductDTO.class);
+		if (productEntity.getProductCategory() != null) {
+			productDTO.setCategoryName(productEntity.getProductCategory().getCategoryName());
+		}
+		return productDTO;
 	}
 	
 	

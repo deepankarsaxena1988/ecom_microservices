@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -44,6 +45,10 @@ public class ProductDetailEntity {
 	@Column(name = "product_rating")
 	BigDecimal productRating;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "product_category_id", referencedColumnName = "category_id")
+	private ProductCategoryEntity productCategory;
+
 	
 	//Unidirectional oneToMany relation
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -55,6 +60,14 @@ public class ProductDetailEntity {
 	  
 	  public void setProductReview(List<ProductReviewEntity> productReview) {
 	  this.productReview = productReview; }
+
+	public ProductCategoryEntity getProductCategory() {
+		return productCategory;
+	}
+
+	public void setProductCategory(ProductCategoryEntity productCategory) {
+		this.productCategory = productCategory;
+	}
 	 
 
 	public BigDecimal getProductRating() {

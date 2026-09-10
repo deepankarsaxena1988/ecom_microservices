@@ -22,7 +22,9 @@ public class PaymentService {
 
     @PostConstruct
     public void init() throws RazorpayException {
+        System.out.println("Initializing PaymentService with keyId: " + keyId + " and keySecret: " + keySecret);
         client = new RazorpayClient(keyId, keySecret);
+        System.out.println("PaymentService initialized successfully "+client);
     }
 
     public JSONObject createOrder(String receipt, int amountInPaise, String currency) throws RazorpayException {
