@@ -4,7 +4,7 @@ services:
     image: mysqlimage:latest
     environment:
       MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: ecomProductDB
+      MYSQL_DATABASE: ecomAccountsDB
       MYSQL_USER: ecomUser
       MYSQL_PASSWORD: root123
     networks:
@@ -16,7 +16,7 @@ services:
       DATABASE_HOST: mysql
       DATABASE_USER: ecomUser
       DATABASE_PASSWORD: root123
-      DATABASE_NAME: ecomProductDB
+      DATABASE_NAME: ecomAccountsDB
     networks:
       - my_network
 
