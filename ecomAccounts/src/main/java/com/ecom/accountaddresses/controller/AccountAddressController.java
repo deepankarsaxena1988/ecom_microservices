@@ -15,7 +15,7 @@ import com.ecom.accountaddresses.entity.AccountAddress;
 import com.ecom.accountaddresses.service.AccountAddressService;
 
 @RestController
-@RequestMapping("ecom/account-addresses")
+@RequestMapping("/account-addresses")
 public class AccountAddressController {
 
     private final AccountAddressService accountAddressService;

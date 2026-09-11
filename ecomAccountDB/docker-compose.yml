@@ -1,7 +1,11 @@
 services:
   ecom-account-addresses-db:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ecom-account-db:local
     container_name: ecom-account-db
+    restart: unless-stopped
     ports:
       - "3312:3306"
     environment:
@@ -14,3 +18,7 @@ services:
 
 volumes:
   ecom_account_db_data:
+
+# Rebuild and recreate the container when Dockerfile or init SQL files change:
+# docker compose up -d --build --force-recreate
+# Use this when the existing DB container is already running and you need the script changes to take effect.

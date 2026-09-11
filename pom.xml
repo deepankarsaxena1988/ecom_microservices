@@ -24,6 +24,7 @@
         <module>ecomProductListUploadConsumer</module>
         <module>ecomPrometheus</module>
         <module>ecomSignUp</module>
+        <module>ecomAccounts</module>
         <module>KafkaConsumer</module>
         <module>kafkaProducer</module>
         <module>Product</module>
