@@ -1,5 +1,5 @@
 services:
-  ecom-account-addresses-db:
+  ecom-account-db:
     build: .
     container_name: ecom-account-db
     ports:
