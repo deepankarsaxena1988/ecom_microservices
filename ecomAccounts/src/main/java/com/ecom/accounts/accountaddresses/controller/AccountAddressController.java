@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecom.accountaddresses.dto.AccountAddressDTO;
 import com.ecom.accountaddresses.entity.AccountAddress;
 import com.ecom.accountaddresses.service.AccountAddressService;
 
@@ -25,8 +26,8 @@ public class AccountAddressController {
     }
 
     @PostMapping
-    public AccountAddress addAddress(@RequestBody AccountAddress accountAddress) {
-        return accountAddressService.addAddress(accountAddress);
+    public AccountAddress addAddress(@RequestBody AccountAddressDTO accountAddressDTO) {
+        return accountAddressService.addAddress(accountAddressDTO);
     }
 
     @PutMapping("/{id}")
@@ -36,13 +37,14 @@ public class AccountAddressController {
 
     @GetMapping("/{id}")
     public AccountAddress getAddress(@PathVariable Long id) {
+        System.out.println("Getting address with id: " + id);
         return accountAddressService.getAddress(id);
     }
 
     @GetMapping
-    public List<AccountAddress> getAddresses(@RequestParam(name = "userId", required = false) Long userId) {
-        if (userId != null) {
-            return accountAddressService.getAddressesByUserId(userId);
+    public List<AccountAddressDTO> getAddresses(@RequestParam(name = "acntId", required = false) Long acntId) {
+        if (acntId != null) {
+            return accountAddressService.getAddressesByAccountId(acntId);
         }
         return accountAddressService.getAllAddresses();
     }

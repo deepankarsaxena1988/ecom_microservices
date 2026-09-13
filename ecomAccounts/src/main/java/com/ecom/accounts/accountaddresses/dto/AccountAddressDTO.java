@@ -1,62 +1,24 @@
-package com.ecom.accountaddresses.entity;
+package com.ecom.accountaddresses.dto;
 
 import java.time.Instant;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+public class AccountAddressDTO {
 
-@Entity
-@Table(name = "account_addresses")
-public class AccountAddress {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-
-    @Column(name = "address_type", nullable = false)
+    private Long acntId;
     private String addressType;
-
-    @Column(name = "full_name", nullable = false)
+    private String customLabel;
     private String fullName;
-
-    @Column(name = "mobile_number", nullable = false)
     private String mobileNumber;
-
-    @Column(name = "address_line1", nullable = false)
     private String addressLine1;
-
-    @Column(name = "address_line2")
     private String addressLine2;
-
-    @Column(name = "landmark")
     private String landmark;
-
-    @Column(name = "city", nullable = false)
     private String city;
-
-    @Column(name = "state", nullable = false)
     private String state;
-
-    @Column(name = "postal_code", nullable = false)
     private String postalCode;
-
-    @Column(name = "country", nullable = false)
     private String country;
-
-    @Column(name = "is_default", nullable = false)
     private Boolean isDefault;
-
-    @Column(name = "created_at", insertable = false, updatable = false)
     private Instant createdAt;
-
-    @Column(name = "updated_at", insertable = false, updatable = false)
     private Instant updatedAt;
 
     public Long getId() {
@@ -67,12 +29,12 @@ public class AccountAddress {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getAcntId() {
+        return acntId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setAcntId(Long acntId) {
+        this.acntId = acntId;
     }
 
     public String getAddressType() {
@@ -81,6 +43,14 @@ public class AccountAddress {
 
     public void setAddressType(String addressType) {
         this.addressType = addressType;
+    }
+
+    public String getCustomLabel() {
+        return customLabel;
+    }
+
+    public void setCustomLabel(String customLabel) {
+        this.customLabel = customLabel;
     }
 
     public String getFullName() {
@@ -167,7 +137,15 @@ public class AccountAddress {
         return createdAt;
     }
 
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

@@ -8,6 +8,7 @@ REM                                       ecomAPIGateWay (in order, with health 
 REM   run.bat <serviceName>            -> starts only the given service
 REM   run.bat restart <serviceName>    -> stops (if running) and restarts the given service
 REM   run.bat stop <serviceName>       -> stops the given service (if currently running)
+REM   run.bat debug <serviceName> [port] -> starts the service with remote debugging (default port: 5005)
 REM   run.bat build <serviceName>      -> runs "mvn clean install" for the given project
 REM   run.bat build <serviceName> <goal(s)> -> runs the given maven goal(s) instead of "clean install"
 REM
@@ -18,6 +19,15 @@ REM ============================================================
 
 SETLOCAL EnableDelayedExpansion
 SET BASE_DIR=%~dp0
+
+IF /I "%~1"=="debug" (
+    IF "%~2"=="" (
+        echo Usage: run.bat debug ^<serviceName^> [debug-port, default: 5005]
+        GOTO :EOF
+    )
+    CALL :START_SERVICE "%~2" debug "%~3"
+    GOTO :EOF
+)
 
 IF /I "%~1"=="build" (
     IF "%~2"=="" (
@@ -84,12 +94,14 @@ ENDLOCAL
 GOTO :EOF
 
 REM ------------------------------------------------------------
-REM :START_SERVICE <serviceName>
+REM :START_SERVICE <serviceName> [debug] [debugPort]
 REM Resolves the project folder for a known service name and
 REM launches it in its own console window via mvnw spring-boot:run.
 REM ------------------------------------------------------------
 :START_SERVICE
 SET SERVICE_NAME=%~1
+SET START_MODE=%~2
+SET DEBUG_PORT=%~3
 CALL :RESOLVE_SERVICE_DIR "%SERVICE_NAME%"
 IF ERRORLEVEL 1 EXIT /B 1
 
@@ -98,6 +110,12 @@ IF EXIST "%SERVICE_DIR%\mvnw.cmd" (
     SET RUN_CMD=.\mvnw.cmd spring-boot:run
 ) ELSE (
     SET RUN_CMD=mvn spring-boot:run
+)
+
+IF /I "%START_MODE%"=="debug" (
+    IF "%DEBUG_PORT%"=="" SET DEBUG_PORT=5005
+    SET RUN_CMD=%RUN_CMD% -Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:%DEBUG_PORT%
+    echo Remote debugging enabled for %SERVICE_NAME% on port %DEBUG_PORT%.
 )
 
 IF NOT EXIST "%BASE_DIR%.run" MKDIR "%BASE_DIR%.run"

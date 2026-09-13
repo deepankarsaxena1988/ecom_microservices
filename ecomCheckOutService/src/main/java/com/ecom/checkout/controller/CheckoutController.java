@@ -40,8 +40,11 @@ public class CheckoutController {
                     Map<String, Object> res = new HashMap<>();
                     res.put("razorpayOrder", order.toMap());
                     res.put("razorpayKeyId", razorpayKeyId);
+                    System.out.println("Order created: " + res);
+
                     return ResponseEntity.status(201).body(res);
                 } catch (Exception e) {
+                    System.out.println("Error creating order: " + e.getMessage());
                     Map<String, Object> err = new HashMap<>();
                     err.put("error", "Failed to create order");
                     err.put("details", e.getMessage());

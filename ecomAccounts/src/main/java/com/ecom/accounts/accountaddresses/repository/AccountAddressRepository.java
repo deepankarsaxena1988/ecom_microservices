@@ -10,5 +10,5 @@ import com.ecom.accountaddresses.entity.AccountAddress;
 @Repository
 public interface AccountAddressRepository extends JpaRepository<AccountAddress, Long> {
 
-    List<AccountAddress> findByUserId(Long userId);
+    List<AccountAddress> findByAcntId(Long acntId);
 }
