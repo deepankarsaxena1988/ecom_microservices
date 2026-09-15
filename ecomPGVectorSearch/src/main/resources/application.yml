@@ -1,0 +1,23 @@
+app:
+  datasource:
+    mysql:
+      url: jdbc:mysql://localhost:3310/ecomProdDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      username: ecomUser
+      password: root123
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    vector:
+      url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: root123
+      driver-class-name: org.postgresql.Driver
+  embedding:
+    enabled: true
+    provider: openai
+    model: text-embedding-3-small
+    base-url: https://api.openai.com/v1
+    api-key: ${OPENAI_API_KEY:}
+
+spring:
+  sql:
+    init:
+      mode: never

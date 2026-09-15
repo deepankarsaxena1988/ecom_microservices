@@ -1,0 +1,17 @@
+services:
+  pgvector-db:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pgvector/pgvector:pg16
+    container_name: pgvector-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: root123
+    volumes:
+      - pgvector_db_data:/var/lib/postgresql/data
+
+volumes:
+  pgvector_db_data:

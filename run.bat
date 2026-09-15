@@ -19,6 +19,8 @@ REM ============================================================
 
 SETLOCAL EnableDelayedExpansion
 SET BASE_DIR=%~dp0
+SET "JAVA_HOME=C:\Program Files\Java\jdk-21.0.12"
+SET "PATH=%JAVA_HOME%\bin;%PATH%"
 
 IF /I "%~1"=="debug" (
     IF "%~2"=="" (

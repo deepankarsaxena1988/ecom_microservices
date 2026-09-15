@@ -19,6 +19,7 @@
         <module>ecomKafkaSchemaRegistry</module>
         <module>ecomOpenTelemetry</module>
         <module>ecomProductList</module>
+        <module>ecomPGVectorSearch</module>
         <module>ecomProductListUpload</module>
         <module>ecomProductListUploadAVRO</module>
         <module>ecomProductListUploadConsumer</module>
@@ -31,6 +32,7 @@
         <module>ProductReviews</module>
         <module>ecomCheckOutService</module>
         <module>ecomOrderSummary</module>
+        <module>StudentPOC</module>
         <module>security/security</module>
     </modules>
 

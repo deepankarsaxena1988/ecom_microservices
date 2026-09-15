@@ -14,7 +14,7 @@
 	<name>ecomProductListUpload</name>
 	<description>Ecom Product List Upload</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
 	</properties>
 	<repositories>
 		<repository>
