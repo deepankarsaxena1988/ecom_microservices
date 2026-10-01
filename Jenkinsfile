@@ -99,38 +99,31 @@ pipeline {
 
         stage('Push Docker images') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-hub-credentials',
-                    usernameVariable: 'DOCKER_USERNAME',
-                    passwordVariable: 'DOCKER_TOKEN'
-                )]) {
-                    powershell '''
-                        $dockerUsername = $env:DOCKER_USERNAME.Trim()
-                        $dockerToken = $env:DOCKER_TOKEN.Trim()
-                        if ([string]::IsNullOrWhiteSpace($dockerUsername) -or [string]::IsNullOrWhiteSpace($dockerToken)) {
-                            throw 'Docker Hub credential is empty. Check the Jenkins credential type and ID.'
-                        }
-                        Write-Host "Docker Hub username: $dockerUsername"
-                        Write-Host "Docker Hub token length: $($dockerToken.Length)"
-                        $dockerToken | docker login --username $dockerUsername --password-stdin
-                        if ($LASTEXITCODE -ne 0) {
-                            throw "Docker Hub authentication failed for user $dockerUsername. Verify the Jenkins credential uses a valid Docker Hub access token."
-                        }
-                    '''
-                    bat 'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
-                    bat 'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%'
-                    bat 'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:build-%BUILD_NUMBER%'
-                    bat 'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:build-%BUILD_NUMBER%'
-                    script {
-                        if (params.PUBLISH_LATEST) {
-                            bat 'docker tag %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG% %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:latest'
-                            bat 'docker tag %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG% %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:latest'
-                            bat 'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:latest'
-                            bat 'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:latest'
-                        }
-                    }
-                    bat 'docker logout'
-                }
+            withCredentials([usernamePassword(
+    credentialsId: 'docker-hub-credentials',
+    usernameVariable: 'DOCKER_USERNAME',
+    passwordVariable: 'DOCKER_TOKEN'
+)]) {
+    // Clean login using Windows Command Prompt (bat) execution
+    bat 'echo %DOCKER_TOKEN%| docker login --username %DOCKER_USERNAME% --password-stdin'
+    
+    // Your existing push commands
+    bat 'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
+    bat 'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%'
+    bat 'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:build-%BUILD_NUMBER%'
+    bat 'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:build-%BUILD_NUMBER%'
+    
+    script {
+        if (params.PUBLISH_LATEST) {
+            bat 'docker tag %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG% %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:latest'
+            bat 'docker tag %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG% %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:latest'
+            bat 'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:latest'
+            bat 'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:latest'
+        }
+    }
+    bat 'docker logout'
+}
+
             }
         }
 
