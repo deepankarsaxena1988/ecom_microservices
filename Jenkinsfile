@@ -105,9 +105,16 @@ pipeline {
                     passwordVariable: 'DOCKER_TOKEN'
                 )]) {
                     powershell '''
-                        $env:DOCKER_TOKEN | docker login --username $env:DOCKER_USERNAME --password-stdin
+                        $dockerUsername = $env:DOCKER_USERNAME.Trim()
+                        $dockerToken = $env:DOCKER_TOKEN.Trim()
+                        if ([string]::IsNullOrWhiteSpace($dockerUsername) -or [string]::IsNullOrWhiteSpace($dockerToken)) {
+                            throw 'Docker Hub credential is empty. Check the Jenkins credential type and ID.'
+                        }
+                        Write-Host "Docker Hub username: $dockerUsername"
+                        Write-Host "Docker Hub token length: $($dockerToken.Length)"
+                        $dockerToken | docker login --username $dockerUsername --password-stdin
                         if ($LASTEXITCODE -ne 0) {
-                            throw "Docker Hub authentication failed for user $env:DOCKER_USERNAME. Verify the Jenkins credential uses a valid Docker Hub access token."
+                            throw "Docker Hub authentication failed for user $dockerUsername. Verify the Jenkins credential uses a valid Docker Hub access token."
                         }
                     '''
                     bat 'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
