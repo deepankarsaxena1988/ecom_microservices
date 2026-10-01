@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="StudentPOC" />
+        <module name="kafkaProducer" />
+        <module name="product" />
+        <module name="ecomAPIGateWay" />
+        <module name="eureka" />
+        <module name="ecomException" />
+        <module name="ecomProductListUpload" />
+        <module name="KafkaConsumer" />
+        <module name="ecomKafkaSchemaRegistry" />
+        <module name="ecomOrderSummary" />
+        <module name="ecomCheckOutService" />
+        <module name="security" />
+        <module name="ecom" />
+        <module name="product-reviews" />
+        <module name="ecomProductList" />
+        <module name="ecomAccounts" />
+        <module name="ecomConfigServer" />
+        <module name="ecomProductListUploadAVRO" />
+        <module name="prometheus" />
+        <module name="ecomProductListUploadConsumer" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

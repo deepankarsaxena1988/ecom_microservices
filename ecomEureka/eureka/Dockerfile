@@ -1,4 +1,9 @@
-FROM openjdk:11
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} ecomEurekaServer.jar
-ENTRYPOINT ["java","-jar","/ecomEurekaServer.jar"]
+FROM eclipse-temurin:17-jre
+
+WORKDIR /app
+
+COPY target/eureka-0.0.1-SNAPSHOT.jar ecomEureka.jar
+
+EXPOSE 5000
+
+ENTRYPOINT ["java", "-jar", "/app/ecomEureka.jar"]

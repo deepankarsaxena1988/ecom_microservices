@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ecomCheckOutConfig" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ecomConfigServer/config-repos" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ecomConfigServer/config-repos/ecomAccountsConfig" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ecomConfigServer/config-repos/ecomCheckOutConfig" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ecomConfigServer/config-repos/ecomOrderSummaryConfig" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ecomConfigServer/config-repos/ecomProductListConfig" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ecomOrderSummaryConfig" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ecomProductListConfig" vcs="Git" />
+  </component>
+</project>

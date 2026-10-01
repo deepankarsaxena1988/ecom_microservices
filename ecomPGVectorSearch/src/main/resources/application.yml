@@ -12,10 +12,20 @@ app:
       driver-class-name: org.postgresql.Driver
   embedding:
     enabled: true
-    provider: openai
-    model: text-embedding-3-small
-    base-url: https://api.openai.com/v1
-    api-key: ${OPENAI_API_KEY:}
+    active-profile: openai
+    profiles:
+      openai:
+        provider: openai
+        model: text-embedding-3-small
+        base-url: https://api.openai.com/v1
+        api-key: ${OPENAI_API_KEY:}
+        dimension: 1536
+      qwen:
+        provider: ollama
+        model: qwen3-embedding:0.6b
+        base-url: http://localhost:11434
+        api-key:
+        dimension: 1024
 
 spring:
   sql:

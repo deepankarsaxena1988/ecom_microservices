@@ -5,7 +5,10 @@ CREATE TABLE IF NOT EXISTS product_vector (
     category_id BIGINT,
     domain VARCHAR(255),
     content_text TEXT NOT NULL,
-    embedding vector(1536),
+    embedding_1536 vector(1536),
+    embedding_1024 vector(1024),
+    embedding_provider VARCHAR(50),
+    embedding_model VARCHAR(100),
     source_updated_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -31,5 +34,8 @@ CREATE INDEX IF NOT EXISTS idx_product_vector_category_id
 CREATE INDEX IF NOT EXISTS idx_product_vector_domain
     ON product_vector (domain);
 
-CREATE INDEX IF NOT EXISTS idx_product_vector_embedding_hnsw
-    ON product_vector USING hnsw (embedding vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS idx_product_vector_embedding_1536_hnsw
+    ON product_vector USING hnsw (embedding_1536 vector_cosine_ops);
+
+CREATE INDEX IF NOT EXISTS idx_product_vector_embedding_1024_hnsw
+    ON product_vector USING hnsw (embedding_1024 vector_cosine_ops);

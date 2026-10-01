@@ -1,0 +1,101 @@
+Good — cleaner design. I'll define named **model profiles** in `application.yml`, and the UI just passes a profile key (e.g. `"qwen"` or `"openai"`); the backend resolves provider/model/baseUrl/apiKey from config.
+
+Rewriting `EmbeddingModelProperties` to hold named profiles + an active-profile key:
+
+Now rewrite `EmbeddingRuntimeConfig` to resolve by profile key:
+
+Now update the DTOs and controller for profile-key-only switching:
+
+Now update `application.yml` with named profiles:
+
+Now compile to check everything builds:
+
+No test dependencies affected. Build is clean.
+
+## Implemented
+
+**`application.yml`** now defines named profiles instead of flat values:
+```yaml
+app:
+  embedding:
+    enabled: true
+    active-profile: openai
+    profiles:
+      openai:
+        provider: openai
+        model: text-embedding-3-small
+        base-url: https://api.openai.com/v1
+        api-key: ${OPENAI_API_KEY:}
+      qwen:
+        provider: ollama
+        model: qwen3-embedding:0.6b
+        base-url: http://localhost:11434
+        api-key:
+```
+
+**`EmbeddingModelProperties`** now binds `activeProfile` + a `profiles` map (`EmbeddingProfile`: provider/model/baseUrl/apiKey).
+
+**`EmbeddingRuntimeConfig`** holds only the active **profile key**; `getProvider()/getModel()/getBaseUrl()/getApiKey()` resolve from the matching yml profile. `switchProfile(key)` validates the key exists.
+
+**`EmbeddingConfigRequest`** now has a single field: `profile`. **`EmbeddingConfigController`**:
+- `GET /api/embedding/config` → active profile + resolved values + list of available profiles.
+- `PUT /api/embedding/config` with `{"profile": "qwen"}` → switches instantly, no other values needed.
+
+To add another model later, just add a new entry under `app.embedding.profiles` in `application.yml` — no code changes needed.
+
+*******************************************************************************************************************************************
+
+
+I'll add an optional `profile` query param to `/api/products/reindex` that switches the active embedding profile before rebuilding (validated against `EmbeddingRuntimeConfig`).
+
+Compiles cleanly.
+
+**Usage:**
+```
+POST /api/products/reindex?profile=qwen
+POST /api/products/reindex?profile=openai
+POST /api/products/reindex          # uses currently active profile
+```
+
+Passing an unknown profile returns `400` with the list of valid profiles (from `application.yml`). A valid profile switches the active embedding config (persists for subsequent search/sync calls too, since it's the same global `EmbeddingRuntimeConfig`), then rebuilds the whole index using that model — vectors get tagged with `embedding_provider`/`embedding_model` accordingly.
+
+*********************************************************************************************************************************************
+
+Sample requests for `/api/products/reindex` (no request body — profile is a query param):
+
+**Using Qwen (Ollama) profile:**
+```bash
+curl -X POST "http://localhost:8080/api/products/reindex?profile=qwen"
+```
+
+**Using OpenAI profile:**
+```bash
+curl -X POST "http://localhost:8080/api/products/reindex?profile=openai"
+```
+
+**Without specifying a profile** (uses currently active one):
+```bash
+curl -X POST "http://localhost:8080/api/products/reindex"
+```
+
+**Sample success response:**
+```json
+{
+  "status": "success",
+  "profile": "qwen",
+  "provider": "ollama",
+  "model": "qwen3-embedding:0.6b",
+  "processedCount": 25
+}
+```
+
+**Sample error response (invalid profile):**
+```bash
+curl -X POST "http://localhost:8080/api/products/reindex?profile=unknown"
+```
+```json
+{
+  "status": "error",
+  "message": "Unknown profile 'unknown'. Available: [openai, qwen]"
+}
+```

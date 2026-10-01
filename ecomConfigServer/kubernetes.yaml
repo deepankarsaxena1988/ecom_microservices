@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecom-config-server
+  labels:
+    app: ecom-config-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecom-config-server
+  template:
+    metadata:
+      labels:
+        app: ecom-config-server
+    spec:
+      containers:
+        - name: ecom-config-server
+          image: deepankarsaxena/ecomconfigserver:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8888
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: ecomConfigServer
+            - name: SERVER_PORT
+              value: "8888"
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://ecom-eureka:5000/eureka
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecom-config-server
+  labels:
+    app: ecom-config-server
+spec:
+  selector:
+    app: ecom-config-server
+  ports:
+    - name: http
+      port: 8888
+      targetPort: 8888
+      protocol: TCP
+  type: ClusterIP

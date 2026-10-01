@@ -8,27 +8,33 @@ import java.util.List;
 @Service
 public class ProductVectorSearchService {
 
-    private static final String SEARCH_SQL = """
+    private static final String SEARCH_SQL_TEMPLATE = """
             SELECT product_id,
                    content_text,
-                   1 - (embedding <=> CAST(? AS vector)) AS similarity,
-                   embedding <=> CAST(? AS vector) AS distance
+                   1 - (%1$s <=> CAST(? AS vector)) AS similarity,
+                   %1$s <=> CAST(? AS vector) AS distance
             FROM product_vector
-            WHERE embedding IS NOT NULL
-            ORDER BY embedding <=> CAST(? AS vector)
+            WHERE %1$s IS NOT NULL
+            ORDER BY %1$s <=> CAST(? AS vector)
             LIMIT ?
             """;
 
     private final JdbcTemplate vectorJdbcTemplate;
     private final ProductEmbeddingService productEmbeddingService;
     private final ProductTextTransformer productTextTransformer;
+    private final EmbeddingRuntimeConfig embeddingRuntimeConfig;
+    private final EmbeddingVectorColumnResolver columnResolver;
 
     public ProductVectorSearchService(@org.springframework.beans.factory.annotation.Qualifier("vectorJdbcTemplate") JdbcTemplate vectorJdbcTemplate,
                                      ProductEmbeddingService productEmbeddingService,
-                                     ProductTextTransformer productTextTransformer) {
+                                     ProductTextTransformer productTextTransformer,
+                                     EmbeddingRuntimeConfig embeddingRuntimeConfig,
+                                     EmbeddingVectorColumnResolver columnResolver) {
         this.vectorJdbcTemplate = vectorJdbcTemplate;
         this.productEmbeddingService = productEmbeddingService;
         this.productTextTransformer = productTextTransformer;
+        this.embeddingRuntimeConfig = embeddingRuntimeConfig;
+        this.columnResolver = columnResolver;
     }
 
     public List<ProductVectorQueryResult> search(String queryText, int limit) {
@@ -37,9 +43,11 @@ public class ProductVectorSearchService {
         }
 
         String vectorLiteral = buildVectorLiteral(productEmbeddingService.generateEmbedding(queryText));
+        // Only matches rows indexed with the currently active profile's dimension/model.
+        String column = columnResolver.resolveColumn(embeddingRuntimeConfig.getDimension());
 
         return vectorJdbcTemplate.query(
-                SEARCH_SQL,
+                SEARCH_SQL_TEMPLATE.formatted(column),
                 (rs, rowNum) -> new ProductVectorQueryResult(
                         rs.getLong("product_id"),
                         rs.getString("content_text"),
