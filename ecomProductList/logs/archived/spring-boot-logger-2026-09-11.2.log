@@ -1,0 +1,174 @@
+2026-09-11 16:57:54,201 INFO o.s.b.StartupInfoLogger [main] Starting EcomProductListApplication using Java 17.0.11 with PID 10280 (C:\Work\ecom\ecom_service_branches\feature-observability-grafana-prometheus-docker\ecom_microservices\ecomProductList\target\classes started by Deepankar in C:\Work\ecom\ecom_service_branches\feature-observability-grafana-prometheus-docker\ecom_microservices\ecomProductList)
+2026-09-11 16:57:54,288 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v3.3.1, Spring v6.1.10
+2026-09-11 16:57:54,305 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-09-11 16:57:54,787 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-11 16:57:54,793 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[default], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-11 16:57:54,799 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-11 16:57:54,802 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[dev], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-11 16:58:00,526 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-11 16:58:02,206 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 1632 ms. Found 2 JPA repository interfaces.
+2026-09-11 16:58:02,909 INFO o.s.c.c.s.GenericScope [main] BeanFactory id=57815e86-a1a5-3462-aadc-3bd29ddc66a9
+2026-09-11 16:58:03,314 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2026-09-11 16:58:03,318 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2026-09-11 16:58:04,535 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port 9203 (http)
+2026-09-11 16:58:04,581 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-9203"]
+2026-09-11 16:58:04,592 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-09-11 16:58:04,592 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/10.1.25]
+2026-09-11 16:58:04,908 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2026-09-11 16:58:04,914 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 10092 ms
+2026-09-11 16:58:05,514 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-11 16:58:05,752 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 6.5.2.Final
+2026-09-11 16:58:05,899 INFO o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+2026-09-11 16:58:08,074 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-11 16:58:08,285 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-11 16:58:12,395 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-11 16:58:12,485 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-09-11 16:58:12,494 WARN c.z.h.u.DriverDataSource [main] Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+2026-09-11 16:58:13,332 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@363d29dd
+2026-09-11 16:58:13,343 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-09-11 16:58:15,161 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-11 16:58:16,950 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-11 16:58:34,226 INFO o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration [main] Eureka HTTP Client uses RestTemplate.
+2026-09-11 16:58:34,730 WARN o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger [main] Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-09-11 16:58:34,888 INFO o.s.c.n.e.InstanceInfoFactory [main] Setting initial instance status as: STARTING
+2026-09-11 16:58:35,042 INFO c.n.d.DiscoveryClient [main] Initializing Eureka in region us-east-1
+2026-09-11 16:58:35,089 INFO c.n.d.s.r.a.ConfigClusterResolver [main] Resolving eureka endpoints via configuration
+2026-09-11 16:58:35,188 INFO c.n.d.DiscoveryClient [main] Disable delta property : false
+2026-09-11 16:58:35,198 INFO c.n.d.DiscoveryClient [main] Single vip registry refresh property : null
+2026-09-11 16:58:35,215 INFO c.n.d.DiscoveryClient [main] Force full registry fetch : false
+2026-09-11 16:58:35,236 INFO c.n.d.DiscoveryClient [main] Application is null : false
+2026-09-11 16:58:35,241 INFO c.n.d.DiscoveryClient [main] Registered Applications size is zero : true
+2026-09-11 16:58:35,248 INFO c.n.d.DiscoveryClient [main] Application version is -1: true
+2026-09-11 16:58:35,252 INFO c.n.d.DiscoveryClient [main] Getting all instance registry info from the eureka server
+2026-09-11 16:58:38,514 INFO c.n.d.DiscoveryClient [main] The response status is 200
+2026-09-11 16:58:38,532 INFO c.n.d.DiscoveryClient [main] Starting heartbeat executor: renew interval is: 30
+2026-09-11 16:58:38,535 INFO c.n.d.InstanceInfoReplicator [main] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-09-11 16:58:38,540 INFO c.n.d.DiscoveryClient [main] Discovery Client initialized at timestamp 1789126118536 with initial instances count: 2
+2026-09-11 16:58:38,550 INFO o.s.c.n.e.s.EurekaServiceRegistry [main] Registering application ECOMPRODUCTLIST with eureka with status UP
+2026-09-11 16:58:38,552 INFO c.n.d.DiscoveryClient$6 [main] Saw local status change event StatusChangeEvent [timestamp=1789126118552, current=UP, previous=STARTING]
+2026-09-11 16:58:38,554 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-9203"]
+2026-09-11 16:58:38,554 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203: registering service...
+2026-09-11 16:58:38,771 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - registration status: 204
+2026-09-11 16:58:38,970 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port 9203 (http) with context path '/'
+2026-09-11 16:58:38,973 INFO o.s.c.n.e.s.EurekaAutoServiceRegistration [main] Updating port to 9203
+2026-09-11 16:58:40,299 INFO o.s.b.StartupInfoLogger [main] Started EcomProductListApplication in 57.345 seconds (process running for 58.154)
+2026-09-11 17:02:08,514 INFO o.a.j.l.DirectJDKLog [http-nio-9203-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-11 17:02:08,519 INFO o.s.w.s.FrameworkServlet [http-nio-9203-exec-2] Initializing Servlet 'dispatcherServlet'
+2026-09-11 17:02:08,523 INFO o.s.w.s.FrameworkServlet [http-nio-9203-exec-2] Completed initialization in 3 ms
+2026-09-11 17:03:35,408 INFO c.n.d.s.r.a.ConfigClusterResolver [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2026-09-11 17:08:35,459 INFO c.n.d.s.r.a.ConfigClusterResolver [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2026-09-11 17:11:20,343 INFO o.s.b.StartupInfoLogger [main] Starting EcomProductListApplication using Java 17.0.11 with PID 29084 (C:\Work\ecom\ecom_service_branches\feature-observability-grafana-prometheus-docker\ecom_microservices\ecomProductList\target\classes started by Deepankar in C:\Work\ecom\ecom_service_branches\feature-observability-grafana-prometheus-docker\ecom_microservices\ecomProductList)
+2026-09-11 17:11:20,347 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v3.3.1, Spring v6.1.10
+2026-09-11 17:11:20,349 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-09-11 17:11:20,419 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-11 17:11:20,420 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[default], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-11 17:11:20,421 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-11 17:11:20,421 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[dev], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-11 17:11:21,438 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-11 17:11:21,797 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 339 ms. Found 2 JPA repository interfaces.
+2026-09-11 17:11:22,231 INFO o.s.c.c.s.GenericScope [main] BeanFactory id=57815e86-a1a5-3462-aadc-3bd29ddc66a9
+2026-09-11 17:11:22,396 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2026-09-11 17:11:22,398 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2026-09-11 17:11:22,933 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port 9203 (http)
+2026-09-11 17:11:22,952 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-9203"]
+2026-09-11 17:11:22,957 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-09-11 17:11:22,958 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/10.1.25]
+2026-09-11 17:11:23,110 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2026-09-11 17:11:23,111 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 2687 ms
+2026-09-11 17:11:23,328 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-11 17:11:23,461 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 6.5.2.Final
+2026-09-11 17:11:23,522 INFO o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+2026-09-11 17:11:24,087 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-11 17:11:24,135 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-11 17:11:25,690 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-11 17:11:25,725 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-09-11 17:11:25,730 WARN c.z.h.u.DriverDataSource [main] Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+2026-09-11 17:11:26,012 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@133d0471
+2026-09-11 17:11:26,016 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-09-11 17:11:26,519 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-11 17:11:26,954 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-11 17:11:28,894 INFO o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration [main] Eureka HTTP Client uses RestTemplate.
+2026-09-11 17:11:28,940 WARN o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger [main] Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-09-11 17:11:28,966 INFO o.s.c.n.e.InstanceInfoFactory [main] Setting initial instance status as: STARTING
+2026-09-11 17:11:29,006 INFO c.n.d.DiscoveryClient [main] Initializing Eureka in region us-east-1
+2026-09-11 17:11:29,014 INFO c.n.d.s.r.a.ConfigClusterResolver [main] Resolving eureka endpoints via configuration
+2026-09-11 17:11:29,028 INFO c.n.d.DiscoveryClient [main] Disable delta property : false
+2026-09-11 17:11:29,028 INFO c.n.d.DiscoveryClient [main] Single vip registry refresh property : null
+2026-09-11 17:11:29,029 INFO c.n.d.DiscoveryClient [main] Force full registry fetch : false
+2026-09-11 17:11:29,029 INFO c.n.d.DiscoveryClient [main] Application is null : false
+2026-09-11 17:11:29,030 INFO c.n.d.DiscoveryClient [main] Registered Applications size is zero : true
+2026-09-11 17:11:29,030 INFO c.n.d.DiscoveryClient [main] Application version is -1: true
+2026-09-11 17:11:29,030 INFO c.n.d.DiscoveryClient [main] Getting all instance registry info from the eureka server
+2026-09-11 17:11:29,505 INFO c.n.d.DiscoveryClient [main] The response status is 200
+2026-09-11 17:11:29,509 INFO c.n.d.DiscoveryClient [main] Starting heartbeat executor: renew interval is: 30
+2026-09-11 17:11:29,514 INFO c.n.d.InstanceInfoReplicator [main] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-09-11 17:11:29,520 INFO c.n.d.DiscoveryClient [main] Discovery Client initialized at timestamp 1789126889517 with initial instances count: 3
+2026-09-11 17:11:29,525 INFO o.s.c.n.e.s.EurekaServiceRegistry [main] Registering application ECOMPRODUCTLIST with eureka with status UP
+2026-09-11 17:11:29,526 INFO c.n.d.DiscoveryClient$6 [main] Saw local status change event StatusChangeEvent [timestamp=1789126889526, current=UP, previous=STARTING]
+2026-09-11 17:11:29,530 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-9203"]
+2026-09-11 17:11:29,530 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203: registering service...
+2026-09-11 17:11:29,577 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port 9203 (http) with context path '/'
+2026-09-11 17:11:29,579 INFO o.s.c.n.e.s.EurekaAutoServiceRegistration [main] Updating port to 9203
+2026-09-11 17:11:29,651 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - registration status: 204
+2026-09-11 17:11:30,480 INFO o.s.b.StartupInfoLogger [main] Started EcomProductListApplication in 16.945 seconds (process running for 18.063)
+2026-09-11 17:11:45,032 INFO o.a.j.l.DirectJDKLog [http-nio-9203-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-11 17:11:45,034 INFO o.s.w.s.FrameworkServlet [http-nio-9203-exec-2] Initializing Servlet 'dispatcherServlet'
+2026-09-11 17:11:45,038 INFO o.s.w.s.FrameworkServlet [http-nio-9203-exec-2] Completed initialization in 3 ms
+2026-09-11 17:13:45,198 INFO o.s.t.c.s.AnnotationConfigContextLoaderUtils [main] Could not detect default configuration classes for test class [com.ecom.productList.EcomProductListApplicationTests]: EcomProductListApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-09-11 17:13:45,356 INFO o.s.b.t.c.SpringBootTestContextBootstrapper [main] Found @SpringBootConfiguration com.ecom.productList.EcomProductListApplication for test class com.ecom.productList.EcomProductListApplicationTests
+2026-09-11 17:13:49,915 INFO o.s.b.StartupInfoLogger [main] Starting EcomProductListApplicationTests using Java 17.0.11 with PID 20788 (started by Deepankar in C:\Work\ecom\ecom_service_branches\feature-observability-grafana-prometheus-docker\ecom_microservices\ecomProductList)
+2026-09-11 17:13:49,920 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v3.3.1, Spring v6.1.10
+2026-09-11 17:13:49,921 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-09-11 17:13:49,976 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-11 17:13:49,977 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[default], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-11 17:13:49,977 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-11 17:13:49,978 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[dev], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-11 17:13:50,984 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-11 17:13:51,227 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 230 ms. Found 2 JPA repository interfaces.
+2026-09-11 17:13:51,619 INFO o.s.c.c.s.GenericScope [main] BeanFactory id=1b4c0acc-f561-3f49-a2b8-3632fe000585
+2026-09-11 17:13:51,839 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2026-09-11 17:13:51,850 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2026-09-11 17:13:52,122 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-11 17:13:52,284 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 6.5.2.Final
+2026-09-11 17:13:52,371 INFO o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+2026-09-11 17:13:53,176 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-11 17:13:53,262 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-11 17:13:54,845 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-11 17:13:54,897 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-09-11 17:13:54,903 WARN c.z.h.u.DriverDataSource [main] Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+2026-09-11 17:13:55,164 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5b977aaa
+2026-09-11 17:13:55,169 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-09-11 17:13:55,463 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-11 17:13:56,034 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-11 17:13:58,264 INFO o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration [main] Eureka HTTP Client uses RestTemplate.
+2026-09-11 17:13:58,332 WARN o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger [main] Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-09-11 17:13:58,356 INFO o.s.c.n.e.InstanceInfoFactory [main] Setting initial instance status as: STARTING
+2026-09-11 17:13:58,398 INFO c.n.d.DiscoveryClient [main] Initializing Eureka in region us-east-1
+2026-09-11 17:13:58,404 INFO c.n.d.s.r.a.ConfigClusterResolver [main] Resolving eureka endpoints via configuration
+2026-09-11 17:13:58,415 INFO c.n.d.DiscoveryClient [main] Disable delta property : false
+2026-09-11 17:13:58,415 INFO c.n.d.DiscoveryClient [main] Single vip registry refresh property : null
+2026-09-11 17:13:58,415 INFO c.n.d.DiscoveryClient [main] Force full registry fetch : false
+2026-09-11 17:13:58,416 INFO c.n.d.DiscoveryClient [main] Application is null : false
+2026-09-11 17:13:58,416 INFO c.n.d.DiscoveryClient [main] Registered Applications size is zero : true
+2026-09-11 17:13:58,416 INFO c.n.d.DiscoveryClient [main] Application version is -1: true
+2026-09-11 17:13:58,416 INFO c.n.d.DiscoveryClient [main] Getting all instance registry info from the eureka server
+2026-09-11 17:13:58,832 INFO c.n.d.DiscoveryClient [main] The response status is 200
+2026-09-11 17:13:58,836 INFO c.n.d.DiscoveryClient [main] Starting heartbeat executor: renew interval is: 30
+2026-09-11 17:13:58,839 INFO c.n.d.InstanceInfoReplicator [main] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-09-11 17:13:58,843 INFO c.n.d.DiscoveryClient [main] Discovery Client initialized at timestamp 1789127038843 with initial instances count: 3
+2026-09-11 17:13:58,850 INFO o.s.c.n.e.s.EurekaServiceRegistry [main] Registering application ECOMPRODUCTLIST with eureka with status UP
+2026-09-11 17:13:58,851 INFO c.n.d.DiscoveryClient$6 [main] Saw local status change event StatusChangeEvent [timestamp=1789127038851, current=UP, previous=STARTING]
+2026-09-11 17:13:58,855 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203: registering service...
+2026-09-11 17:13:58,869 INFO o.s.b.StartupInfoLogger [main] Started EcomProductListApplicationTests in 13.289 seconds (process running for 15.017)
+2026-09-11 17:13:58,938 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - registration status: 204
+2026-09-11 17:13:59,767 INFO o.s.c.n.e.s.EurekaServiceRegistry [SpringApplicationShutdownHook] Unregistering application ECOMPRODUCTLIST with eureka with status DOWN
+2026-09-11 17:13:59,768 INFO c.n.d.DiscoveryClient$6 [SpringApplicationShutdownHook] Saw local status change event StatusChangeEvent [timestamp=1789127039768, current=DOWN, previous=UP]
+2026-09-11 17:13:59,769 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203: registering service...
+2026-09-11 17:13:59,773 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-11 17:13:59,778 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-09-11 17:13:59,784 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - registration status: 204
+2026-09-11 17:13:59,793 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-09-11 17:13:59,794 INFO c.n.d.DiscoveryClient [SpringApplicationShutdownHook] Shutting down DiscoveryClient ...
+2026-09-11 17:14:02,798 INFO c.n.d.DiscoveryClient [SpringApplicationShutdownHook] Unregistering ...
+2026-09-11 17:14:02,894 INFO c.n.d.DiscoveryClient [SpringApplicationShutdownHook] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - deregister  status: 200
+2026-09-11 17:14:02,895 INFO c.n.d.DiscoveryClient [SpringApplicationShutdownHook] Completed shut down of DiscoveryClient

@@ -1,0 +1,245 @@
+2026-09-10 05:54:48,165 INFO c.n.d.DiscoveryClient [DiscoveryClient-HeartbeatExecutor-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - Re-registering apps/ECOMPRODUCTLIST
+2026-09-10 05:54:48,173 INFO c.n.d.DiscoveryClient [DiscoveryClient-HeartbeatExecutor-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203: registering service...
+2026-09-10 05:54:48,180 INFO c.n.d.DiscoveryClient [DiscoveryClient-HeartbeatExecutor-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - registration status: 204
+2026-09-10 05:55:02,892 INFO o.s.b.StartupInfoLogger [main] Starting EcomProductListApplication using Java 17.0.11 with PID 31224 (C:\Work\ecom\ecom_service_branches\feature-observability-grafana-prometheus-docker\ecom_microservices\ecomProductList\target\classes started by Deepankar in C:\Work\ecom\ecom_service_branches\feature-observability-grafana-prometheus-docker\ecom_microservices\ecomProductList)
+2026-09-10 05:55:02,894 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v3.3.1, Spring v6.1.10
+2026-09-10 05:55:02,895 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-09-10 05:55:02,929 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-10 05:55:02,930 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[default], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-10 05:55:02,930 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-10 05:55:02,930 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[dev], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-10 05:55:03,451 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-10 05:55:03,584 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 125 ms. Found 2 JPA repository interfaces.
+2026-09-10 05:55:03,777 INFO o.s.c.c.s.GenericScope [main] BeanFactory id=2d7e77b4-6284-3e1b-af31-f3c9b34e9951
+2026-09-10 05:55:03,918 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2026-09-10 05:55:03,920 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2026-09-10 05:55:04,152 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port 9203 (http)
+2026-09-10 05:55:04,163 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-9203"]
+2026-09-10 05:55:04,164 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-09-10 05:55:04,166 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/10.1.25]
+2026-09-10 05:55:04,232 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2026-09-10 05:55:04,233 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 1299 ms
+2026-09-10 05:55:04,340 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-10 05:55:04,379 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 6.5.2.Final
+2026-09-10 05:55:04,403 INFO o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+2026-09-10 05:55:04,617 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-10 05:55:04,640 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-10 05:55:05,358 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-10 05:55:05,377 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-09-10 05:55:05,381 WARN c.z.h.u.DriverDataSource [main] Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+2026-09-10 05:55:05,528 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@294b045b
+2026-09-10 05:55:05,530 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-09-10 05:55:05,724 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-10 05:55:05,971 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-10 05:55:07,024 INFO o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration [main] Eureka HTTP Client uses RestTemplate.
+2026-09-10 05:55:07,053 WARN o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger [main] Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-09-10 05:55:07,068 INFO o.s.c.n.e.InstanceInfoFactory [main] Setting initial instance status as: STARTING
+2026-09-10 05:55:07,087 INFO c.n.d.DiscoveryClient [main] Initializing Eureka in region us-east-1
+2026-09-10 05:55:07,091 INFO c.n.d.s.r.a.ConfigClusterResolver [main] Resolving eureka endpoints via configuration
+2026-09-10 05:55:07,097 INFO c.n.d.DiscoveryClient [main] Disable delta property : false
+2026-09-10 05:55:07,098 INFO c.n.d.DiscoveryClient [main] Single vip registry refresh property : null
+2026-09-10 05:55:07,098 INFO c.n.d.DiscoveryClient [main] Force full registry fetch : false
+2026-09-10 05:55:07,098 INFO c.n.d.DiscoveryClient [main] Application is null : false
+2026-09-10 05:55:07,099 INFO c.n.d.DiscoveryClient [main] Registered Applications size is zero : true
+2026-09-10 05:55:07,099 INFO c.n.d.DiscoveryClient [main] Application version is -1: true
+2026-09-10 05:55:07,100 INFO c.n.d.DiscoveryClient [main] Getting all instance registry info from the eureka server
+2026-09-10 05:55:07,330 INFO c.n.d.DiscoveryClient [main] The response status is 200
+2026-09-10 05:55:07,333 INFO c.n.d.DiscoveryClient [main] Starting heartbeat executor: renew interval is: 30
+2026-09-10 05:55:07,338 INFO c.n.d.InstanceInfoReplicator [main] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-09-10 05:55:07,340 INFO c.n.d.DiscoveryClient [main] Discovery Client initialized at timestamp 1788999907340 with initial instances count: 3
+2026-09-10 05:55:07,344 INFO o.s.c.n.e.s.EurekaServiceRegistry [main] Registering application ECOMPRODUCTLIST with eureka with status UP
+2026-09-10 05:55:07,345 INFO c.n.d.DiscoveryClient$6 [main] Saw local status change event StatusChangeEvent [timestamp=1788999907345, current=UP, previous=STARTING]
+2026-09-10 05:55:07,347 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-9203"]
+2026-09-10 05:55:07,347 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203: registering service...
+2026-09-10 05:55:07,372 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port 9203 (http) with context path '/'
+2026-09-10 05:55:07,372 INFO o.s.c.n.e.s.EurekaAutoServiceRegistration [main] Updating port to 9203
+2026-09-10 05:55:07,389 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - registration status: 204
+2026-09-10 05:55:07,761 INFO o.s.b.StartupInfoLogger [main] Started EcomProductListApplication in 7.862 seconds (process running for 8.481)
+2026-09-10 05:55:18,274 INFO o.a.j.l.DirectJDKLog [http-nio-9203-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-10 05:55:18,275 INFO o.s.w.s.FrameworkServlet [http-nio-9203-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-09-10 05:55:18,276 INFO o.s.w.s.FrameworkServlet [http-nio-9203-exec-1] Completed initialization in 1 ms
+2026-09-10 06:00:07,114 INFO c.n.d.s.r.a.ConfigClusterResolver [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2026-09-10 06:01:26,111 INFO o.s.t.c.s.AnnotationConfigContextLoaderUtils [main] Could not detect default configuration classes for test class [com.ecom.productList.EcomProductListApplicationTests]: EcomProductListApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-09-10 06:01:26,303 INFO o.s.b.t.c.SpringBootTestContextBootstrapper [main] Found @SpringBootConfiguration com.ecom.productList.EcomProductListApplication for test class com.ecom.productList.EcomProductListApplicationTests
+2026-09-10 06:01:30,652 INFO o.s.b.StartupInfoLogger [main] Starting EcomProductListApplicationTests using Java 17.0.11 with PID 24868 (started by Deepankar in C:\Work\ecom\ecom_service_branches\feature-observability-grafana-prometheus-docker\ecom_microservices\ecomProductList)
+2026-09-10 06:01:30,654 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v3.3.1, Spring v6.1.10
+2026-09-10 06:01:30,656 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-09-10 06:01:30,705 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-10 06:01:30,706 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[default], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-10 06:01:30,707 INFO o.s.b.l.DeferredLog [main] Fetching config from server at : http://localhost:8888
+2026-09-10 06:01:30,709 INFO o.s.b.l.DeferredLog [main] Located environment: name=ecomProductList, profiles=[dev], label=null, version=b6dc840e19e47718d7a3fb7ad27fc74d27a38f9a, state=null
+2026-09-10 06:01:33,114 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-10 06:01:33,547 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 411 ms. Found 2 JPA repository interfaces.
+2026-09-10 06:01:34,271 INFO o.s.c.c.s.GenericScope [main] BeanFactory id=1b4c0acc-f561-3f49-a2b8-3632fe000585
+2026-09-10 06:01:34,719 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2026-09-10 06:01:34,724 WARN o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [main] Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2026-09-10 06:01:35,423 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-10 06:01:35,713 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 6.5.2.Final
+2026-09-10 06:01:35,829 INFO o.h.c.i.RegionFactoryInitiator [main] HHH000026: Second-level cache disabled
+2026-09-10 06:01:37,455 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-10 06:01:37,592 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-10 06:01:40,484 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-10 06:01:40,530 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-09-10 06:01:40,540 WARN c.z.h.u.DriverDataSource [main] Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
+2026-09-10 06:01:40,861 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1b897ffb
+2026-09-10 06:01:40,867 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-09-10 06:01:41,194 WARN o.h.t.s.i.ExceptionHandlerLoggedImpl [main] GenerationTarget encountered exception accepting command : Error executing DDL "alter table ecom_product add constraint FK68b2w82yol3ualhwekkndr20v foreign key (product_category_id) references ecom_product_category (category_id)" via JDBC [Failed to add the foreign key constraint. Missing index for constraint 'FK68b2w82yol3ualhwekkndr20v' in the referenced table 'ecom_product_category']
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "alter table ecom_product add constraint FK68b2w82yol3ualhwekkndr20v foreign key (product_category_id) references ecom_product_category (category_id)" via JDBC [Failed to add the foreign key constraint. Missing index for constraint 'FK68b2w82yol3ualhwekkndr20v' in the referenced table 'ecom_product_category']
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:575)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:515)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyForeignKeys(AbstractSchemaMigrator.java:447)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:268)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:117)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:280)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:322)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:457)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1506)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1835)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1784)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.test.context.SpringBootContextLoader.lambda$loadContext$3(SpringBootContextLoader.java:137)
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:58)
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:46)
+	at org.springframework.boot.SpringApplication.withHook(SpringApplication.java:1463)
+	at org.springframework.boot.test.context.SpringBootContextLoader$ContextLoaderHook.run(SpringBootContextLoader.java:553)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:137)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:108)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:225)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:152)
+	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
+	at org.springframework.test.context.web.ServletTestExecutionListener.setUpRequestContextIfNecessary(ServletTestExecutionListener.java:191)
+	at org.springframework.test.context.web.ServletTestExecutionListener.prepareTestInstance(ServletTestExecutionListener.java:130)
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:260)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.postProcessTestInstance(SpringExtension.java:163)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$10(ClassBasedTestDescriptor.java:378)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.executeAndMaskThrowable(ClassBasedTestDescriptor.java:383)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$11(ClassBasedTestDescriptor.java:378)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:310)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:735)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeTestInstancePostProcessors(ClassBasedTestDescriptor.java:377)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$instantiateAndPostProcessTestInstance$6(ClassBasedTestDescriptor.java:290)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.instantiateAndPostProcessTestInstance(ClassBasedTestDescriptor.java:289)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$4(ClassBasedTestDescriptor.java:279)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$5(ClassBasedTestDescriptor.java:278)
+	at org.junit.jupiter.engine.execution.TestInstancesProvider.getTestInstances(TestInstancesProvider.java:31)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$prepare$0(TestMethodTestDescriptor.java:106)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:105)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$prepare$2(NodeTestTask.java:123)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.prepare(NodeTestTask.java:123)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:90)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+Caused by: java.sql.SQLException: Failed to add the foreign key constraint. Missing index for constraint 'FK68b2w82yol3ualhwekkndr20v' in the referenced table 'ecom_product_category'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:130)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:770)
+	at com.mysql.cj.jdbc.StatementImpl.execute(StatementImpl.java:653)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 114 common frames omitted
+2026-09-10 06:01:41,315 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-10 06:01:44,382 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-10 06:01:51,336 INFO o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration [main] Eureka HTTP Client uses RestTemplate.
+2026-09-10 06:01:51,470 WARN o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger [main] Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-09-10 06:01:51,559 INFO o.s.c.n.e.InstanceInfoFactory [main] Setting initial instance status as: STARTING
+2026-09-10 06:01:51,644 INFO c.n.d.DiscoveryClient [main] Initializing Eureka in region us-east-1
+2026-09-10 06:01:51,655 INFO c.n.d.s.r.a.ConfigClusterResolver [main] Resolving eureka endpoints via configuration
+2026-09-10 06:01:51,680 INFO c.n.d.DiscoveryClient [main] Disable delta property : false
+2026-09-10 06:01:51,680 INFO c.n.d.DiscoveryClient [main] Single vip registry refresh property : null
+2026-09-10 06:01:51,680 INFO c.n.d.DiscoveryClient [main] Force full registry fetch : false
+2026-09-10 06:01:51,680 INFO c.n.d.DiscoveryClient [main] Application is null : false
+2026-09-10 06:01:51,680 INFO c.n.d.DiscoveryClient [main] Registered Applications size is zero : true
+2026-09-10 06:01:51,686 INFO c.n.d.DiscoveryClient [main] Application version is -1: true
+2026-09-10 06:01:51,687 INFO c.n.d.DiscoveryClient [main] Getting all instance registry info from the eureka server
+2026-09-10 06:01:52,653 INFO c.n.d.DiscoveryClient [main] The response status is 200
+2026-09-10 06:01:52,663 INFO c.n.d.DiscoveryClient [main] Starting heartbeat executor: renew interval is: 30
+2026-09-10 06:01:52,668 INFO c.n.d.InstanceInfoReplicator [main] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-09-10 06:01:52,673 INFO c.n.d.DiscoveryClient [main] Discovery Client initialized at timestamp 1789000312673 with initial instances count: 3
+2026-09-10 06:01:52,673 INFO o.s.c.n.e.s.EurekaServiceRegistry [main] Registering application ECOMPRODUCTLIST with eureka with status UP
+2026-09-10 06:01:52,683 INFO c.n.d.DiscoveryClient$6 [main] Saw local status change event StatusChangeEvent [timestamp=1789000312683, current=UP, previous=STARTING]
+2026-09-10 06:01:52,686 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203: registering service...
+2026-09-10 06:01:52,716 INFO o.s.b.StartupInfoLogger [main] Started EcomProductListApplicationTests in 26.171 seconds (process running for 28.317)
+2026-09-10 06:01:52,883 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - registration status: 204
+2026-09-10 06:01:53,870 INFO o.s.c.n.e.s.EurekaServiceRegistry [SpringApplicationShutdownHook] Unregistering application ECOMPRODUCTLIST with eureka with status DOWN
+2026-09-10 06:01:53,870 INFO c.n.d.DiscoveryClient$6 [SpringApplicationShutdownHook] Saw local status change event StatusChangeEvent [timestamp=1789000313870, current=DOWN, previous=UP]
+2026-09-10 06:01:53,870 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203: registering service...
+2026-09-10 06:01:53,886 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-10 06:01:53,888 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - registration status: 204
+2026-09-10 06:01:53,892 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-09-10 06:01:53,911 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-09-10 06:01:53,912 INFO c.n.d.DiscoveryClient [SpringApplicationShutdownHook] Shutting down DiscoveryClient ...
+2026-09-10 06:01:56,926 INFO c.n.d.DiscoveryClient [SpringApplicationShutdownHook] Unregistering ...
+2026-09-10 06:01:56,944 INFO c.n.d.DiscoveryClient [SpringApplicationShutdownHook] DiscoveryClient_ECOMPRODUCTLIST/host.docker.internal:ecomProductList:9203 - deregister  status: 200
+2026-09-10 06:01:56,946 INFO c.n.d.DiscoveryClient [SpringApplicationShutdownHook] Completed shut down of DiscoveryClient
