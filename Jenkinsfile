@@ -104,7 +104,12 @@ pipeline {
                     usernameVariable: 'DOCKER_USERNAME',
                     passwordVariable: 'DOCKER_TOKEN'
                 )]) {
-                    bat 'echo %DOCKER_TOKEN% | docker login --username %DOCKER_USERNAME% --password-stdin'
+                    powershell '''
+                        $env:DOCKER_TOKEN | docker login --username $env:DOCKER_USERNAME --password-stdin
+                        if ($LASTEXITCODE -ne 0) {
+                            throw "Docker Hub authentication failed for user $env:DOCKER_USERNAME. Verify the Jenkins credential uses a valid Docker Hub access token."
+                        }
+                    '''
                     bat 'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
                     bat 'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%'
                     bat 'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:build-%BUILD_NUMBER%'
