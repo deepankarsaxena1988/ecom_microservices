@@ -46,9 +46,13 @@ pipeline {
             steps {
                 checkout scm
                 script {
-                    env.COMMIT_TAG = "${env.GIT_COMMIT.take(12)}-${env.BUILD_NUMBER}"
+                    env.COMMIT_SHA = bat(
+                        returnStdout: true,
+                        script: '@echo off\ngit rev-parse --short=12 HEAD'
+                    ).trim()
+                    env.COMMIT_TAG = "${env.COMMIT_SHA}-${env.BUILD_NUMBER}"
                 }
-                bat 'git rev-parse --short=12 HEAD'
+                bat 'echo Commit: %COMMIT_SHA%'
             }
         }
 
@@ -80,7 +84,7 @@ pipeline {
                 bat 'docker image inspect %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
                 bat 'docker image inspect %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%'
                 bat '''(
-                    echo commit=%GIT_COMMIT%
+                    echo commit=%COMMIT_SHA%
                     echo build=%BUILD_NUMBER%
                     echo config-server=%DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%
                     echo eureka=%DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%
