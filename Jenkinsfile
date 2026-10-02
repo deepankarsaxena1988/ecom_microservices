@@ -18,11 +18,6 @@ pipeline {
             defaultValue: false,
             description: 'Also push the latest tag for builds from the selected release branch.'
         )
-        booleanParam(
-            name: 'DEPLOY_TO_LOCAL_KUBERNETES',
-            defaultValue: false,
-            description: 'Pause for approval and deploy Eureka and Config Server to Docker Desktop Kubernetes.'
-        )
         string(
             name: 'KUBERNETES_CONTEXT',
             defaultValue: 'ecom-multi-node-cluster',
@@ -39,6 +34,7 @@ pipeline {
         DOCKER_NAMESPACE = 'deepankarsaxena'
         EUREKA_IMAGE = 'ecomeureka'
         CONFIG_SERVER_IMAGE = 'ecomconfigserver'
+        DEPLOY_TO_LOCAL_KUBERNETES = 'false'
     }
 
     stages {
@@ -128,17 +124,28 @@ pipeline {
         }
 
         stage('Approve deployment') {
-            when {
-                expression { params.DEPLOY_TO_LOCAL_KUBERNETES }
-            }
             steps {
-                input message: "Deploy ${env.COMMIT_TAG} to ${params.KUBERNETES_CONTEXT}/${params.KUBERNETES_NAMESPACE}?", ok: 'Deploy'
+                script {
+                    def deploymentDecision = input(
+                        message: "Deploy ${env.COMMIT_TAG} to ${params.KUBERNETES_CONTEXT}/${params.KUBERNETES_NAMESPACE}?",
+                        ok: 'Submit decision',
+                        parameters: [
+                            choice(
+                                name: 'DEPLOYMENT_DECISION',
+                                choices: ['Deny', 'Approve'],
+                                description: 'Choose whether this build should deploy.'
+                            )
+                        ]
+                    )
+                    env.DEPLOY_TO_LOCAL_KUBERNETES = deploymentDecision == 'Approve' ? 'true' : 'false'
+                    echo "Deployment decision: ${deploymentDecision}"
+                }
             }
         }
 
         stage('Ensure Kubernetes cluster is running') {
             when {
-                expression { params.DEPLOY_TO_LOCAL_KUBERNETES }
+                expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
                 script {
@@ -156,7 +163,7 @@ pipeline {
 
         stage('Validate Kubernetes manifests') {
             when {
-                expression { params.DEPLOY_TO_LOCAL_KUBERNETES }
+                expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
                 bat 'kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f ecomConfigServer/kubernetes.yaml'
@@ -166,7 +173,7 @@ pipeline {
 
         stage('Deploy to local Kubernetes') {
             when {
-                expression { params.DEPLOY_TO_LOCAL_KUBERNETES }
+                expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
                 bat 'kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f ecomConfigServer/kubernetes.yaml'
@@ -180,7 +187,7 @@ pipeline {
 
         stage('Deployment verification') {
             when {
-                expression { params.DEPLOY_TO_LOCAL_KUBERNETES }
+                expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
                 bat 'kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" get deployments,pods,services -l app=ecom-config-server -o wide'
