@@ -136,6 +136,24 @@ pipeline {
             }
         }
 
+        stage('Ensure Kubernetes cluster is running') {
+            when {
+                expression { params.DEPLOY_TO_LOCAL_KUBERNETES }
+            }
+            steps {
+                script {
+                    def clusterStatus = bat(
+                        returnStatus: true,
+                        script: 'minikube status -p ecom-multi-node-cluster'
+                    )
+                    if (clusterStatus != 0) {
+                        bat 'minikube start --nodes 3 -p ecom-multi-node-cluster'
+                    }
+                }
+                bat 'minikube status -p ecom-multi-node-cluster'
+            }
+        }
+
         stage('Validate Kubernetes manifests') {
             when {
                 expression { params.DEPLOY_TO_LOCAL_KUBERNETES }
