@@ -37,6 +37,13 @@ spec:
               value: http://ecom-eureka:5000/eureka
             - name: EUREKA_INSTANCE_HOSTNAME
               value: ecom-eureka
+          resources:
+            requests:
+              memory: "400Mi"
+              cpu: "100m"
+            limits:
+              memory: "600Mi"
+              cpu: "500m"
 ---
 apiVersion: v1
 kind: Service

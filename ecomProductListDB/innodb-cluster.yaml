@@ -1,0 +1,65 @@
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: ecom-product-db
+  namespace: ecom-product-db-ns
+spec:
+  secretName: ecom-product-list-cluster-secret
+  instances: 3
+  tlsUseSelfSigned: true
+  router:
+    instances: 1
+    # NOTE: router.podSpec is only applied when the Router Deployment is first created by the
+    # operator; it is not re-applied to an already-running Deployment if this field changes later.
+    podSpec:
+      containers:
+        - name: router
+          resources:
+            requests:
+              memory: "150Mi"
+              cpu: "100m"
+            limits:
+              memory: "200Mi"
+              cpu: "300m"
+  datadirVolumeClaimTemplate:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 2Gi
+  # Shrink the InnoDB buffer pool (default assumes far more RAM than is actually available per
+  # node in this minikube cluster, where each node container is hard-capped at ~3GB) so 6 MySQL
+  # instances across both clusters can realistically coexist without triggering OOM kills.
+  mycnf: |
+    [mysqld]
+    innodb_buffer_pool_size=128M
+    innodb_buffer_pool_instances=1
+    performance_schema=OFF
+  # Increased probe timeouts from the operator's default 1s, which was too aggressive for this
+  # resource-constrained cluster and caused kubelet to repeatedly kill/restart the mysql
+  # container (breaking Group Replication quorum and leaving the cluster OFFLINE).
+  # NOTE: podSpec is only applied when the StatefulSet is first created by the operator; it is
+  # not re-applied to an already-running StatefulSet if this field changes later.
+  # Existing pods also need an in-place memory resize and the StatefulSet template updated.
+  # Allow recovery headroom: the previous 768Mi limit caused OOM kills during member rejoin.
+  # During recovery, the live StatefulSet uses OnDelete to prevent automatic member restarts.
+  podSpec:
+    containers:
+      - name: mysql
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "150m"
+          limits:
+            memory: "1536Mi"
+            cpu: "500m"
+        livenessProbe:
+          timeoutSeconds: 10
+          periodSeconds: 20
+          failureThreshold: 15
+        readinessProbe:
+          timeoutSeconds: 10
+          periodSeconds: 10
+        startupProbe:
+          timeoutSeconds: 10
+          periodSeconds: 5
