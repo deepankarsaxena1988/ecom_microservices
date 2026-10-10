@@ -9,7 +9,7 @@ spec:
   tlsUseSelfSigned: true
   router:
     instances: 1
-    # NOTE: router.podSpec is only applied when the Router Deployment is first created by the
+    # NOTE: router.podSpec is only applied when the Router  Deployment is first created by the
     # operator; it is not re-applied to an already-running Deployment if this field changes later.
     podSpec:
       containers:
