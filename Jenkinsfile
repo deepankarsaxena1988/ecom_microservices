@@ -1,6 +1,8 @@
 def runOnAgent(String unixCommand, String windowsCommand, Map options = [:]) {
     if (isUnix()) {
-        return sh(options + [script: unixCommand])
+        return withEnv(['PATH+LOCAL=/usr/local/bin']) {
+            sh(options + [script: unixCommand])
+        }
     }
     return bat(options + [script: windowsCommand])
 }
