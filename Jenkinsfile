@@ -28,11 +28,6 @@ pipeline {
             defaultValue: 'default',
             description: 'Kubernetes namespace used for the approved deployment.'
         )
-        string(
-            name: 'WSL_DISTRIBUTION',
-            defaultValue: 'Ubuntu',
-            description: 'WSL distribution containing the Minikube profile and kubectl context.'
-        )
     }
 
     environment {
@@ -158,28 +153,28 @@ pipeline {
                         script: '@echo off\nwhoami'
                     ).trim()
                     echo "Windows identity executing deployment: ${windowsIdentity}"
-                    echo "WSL distribution requested: ${params.WSL_DISTRIBUTION}"
+                    echo 'Using the default WSL distribution shown by `wsl.exe --list --verbose`.'
                     bat 'echo Windows profile: %USERPROFILE%'
                     bat 'wsl.exe --list --verbose'
                     def wslLaunchStatus = bat(
                         returnStatus: true,
-                        script: 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec /bin/true'
+                        script: 'wsl.exe --exec /bin/true'
                     )
                     if (wslLaunchStatus != 0) {
-                        error("WSL could not launch distribution ${params.WSL_DISTRIBUTION} for Windows identity ${windowsIdentity}. Use the exact distribution name shown by `wsl.exe --list --verbose` above, and ensure the Jenkins service has that user's WSL profile loaded.")
+                        error("WSL could not launch the default distribution for Windows identity ${windowsIdentity}. Ensure the Jenkins service user's default WSL distribution is Ubuntu and that this account can launch it interactively.")
                     }
                     env.WSL_WORKSPACE = bat(
                         returnStdout: true,
-                        script: '@echo off\nwsl.exe -d "%WSL_DISTRIBUTION%" --exec wslpath -a "%WORKSPACE%"'
+                        script: '@echo off\nwsl.exe --exec wslpath -a "%WORKSPACE%"'
                     ).trim()
                     def clusterStatus = bat(
                         returnStatus: true,
-                        script: 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec minikube status -p ecom-multi-node-cluster'
+                        script: 'wsl.exe --exec minikube status -p ecom-multi-node-cluster'
                     )
                     if (clusterStatus != 0) {
-                        error("Minikube profile ecom-multi-node-cluster is unavailable in WSL distribution %WSL_DISTRIBUTION%. Start and verify it from Ubuntu; Jenkins will not create a separate Windows cluster.")
+                        error('Minikube profile ecom-multi-node-cluster is unavailable in the default WSL distribution. Start and verify it from Ubuntu; Jenkins will not create a separate Windows cluster.')
                     }
-                    bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" get nodes -o wide'
+                    bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" get nodes -o wide'
                 }
             }
         }
@@ -189,8 +184,8 @@ pipeline {
                 expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%WSL_WORKSPACE%/ecomConfigServer/kubernetes.yaml"'
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%WSL_WORKSPACE%/ecomEureka/kubernetes.yaml"'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%WSL_WORKSPACE%/ecomConfigServer/kubernetes.yaml"'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%WSL_WORKSPACE%/ecomEureka/kubernetes.yaml"'
             }
         }
 
@@ -199,12 +194,12 @@ pipeline {
                 expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%WSL_WORKSPACE%/ecomConfigServer/kubernetes.yaml"'
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%WSL_WORKSPACE%/ecomEureka/kubernetes.yaml"'
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" set image deployment/ecom-config-server ecom-config-server=%DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" set image deployment/ecom-eureka ecom-eureka=%DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%'
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-config-server --timeout=180s'
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-eureka --timeout=180s'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%WSL_WORKSPACE%/ecomConfigServer/kubernetes.yaml"'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%WSL_WORKSPACE%/ecomEureka/kubernetes.yaml"'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" set image deployment/ecom-config-server ecom-config-server=%DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" set image deployment/ecom-eureka ecom-eureka=%DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-config-server --timeout=180s'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-eureka --timeout=180s'
             }
         }
 
@@ -213,8 +208,8 @@ pipeline {
                 expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" get deployments,pods,services -l app=ecom-config-server -o wide'
-                bat 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" get deployments,pods,services -l app=ecom-eureka -o wide'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" get deployments,pods,services -l app=ecom-config-server -o wide'
+                bat 'wsl.exe --exec kubectl --context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" get deployments,pods,services -l app=ecom-eureka -o wide'
             }
         }
     }
