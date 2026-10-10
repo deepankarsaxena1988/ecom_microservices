@@ -34,7 +34,6 @@ pipeline {
         DOCKER_NAMESPACE = 'deepankarsaxena'
         EUREKA_IMAGE = 'ecomeureka'
         CONFIG_SERVER_IMAGE = 'ecomconfigserver'
-        DEPLOY_TO_LOCAL_KUBERNETES = 'false'
     }
 
     stages {
@@ -138,7 +137,7 @@ pipeline {
                         ]
                     )
                     env.DEPLOY_TO_LOCAL_KUBERNETES = deploymentDecision == 'Approve' ? 'true' : 'false'
-                    echo "Deployment decision: ${deploymentDecision}"
+                    echo "Deployment decision: ${deploymentDecision}; Kubernetes deployment enabled: ${env.DEPLOY_TO_LOCAL_KUBERNETES}"
                 }
             }
         }
