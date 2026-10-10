@@ -34,7 +34,7 @@ spec:
     [mysqld]
     innodb_buffer_pool_size=128M
     innodb_buffer_pool_instances=1
-    performance_schema=OFF
+    performance_schema=ON
   # Increased probe timeouts from the operator's default 1s, which was too aggressive for this
   # resource-constrained cluster and caused kubelet to repeatedly kill/restart the mysql
   # container (breaking Group Replication quorum and leaving the cluster OFFLINE).

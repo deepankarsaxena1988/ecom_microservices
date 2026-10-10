@@ -1,0 +1,59 @@
+# Requires the MySQL Operator and a default ReadWriteOnce storage class.
+# Run create-cluster-secret.ps1 to create the namespace and
+# ecom-order-summary-cluster-secret using a secure password prompt.
+# Apply this manifest only after creating the Secret.
+# This creates the database servers; import ecomOrderSummaryDB.sql separately.
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: ecom-order-summary-db
+  namespace: ecom-order-summary-db-ns
+spec:
+  secretName: ecom-order-summary-cluster-secret
+  instances: 3
+  tlsUseSelfSigned: true
+  router:
+    instances: 1
+    podSpec:
+      containers:
+        - name: router
+          resources:
+            requests:
+              memory: "150Mi"
+              cpu: "100m"
+            limits:
+              memory: "200Mi"
+              cpu: "300m"
+  datadirVolumeClaimTemplate:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 2Gi
+  # Keep the buffer pool small for Minikube; InnoDB Cluster requires performance_schema.
+  mycnf: |
+    [mysqld]
+    innodb_buffer_pool_size=128M
+    innodb_buffer_pool_instances=1
+    performance_schema=ON
+  # Allow startup and recovery time on resource-constrained nodes.
+  podSpec:
+    containers:
+      - name: mysql
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "150m"
+          limits:
+            memory: "1536Mi"
+            cpu: "500m"
+        livenessProbe:
+          timeoutSeconds: 10
+          periodSeconds: 20
+          failureThreshold: 15
+        readinessProbe:
+          timeoutSeconds: 10
+          periodSeconds: 10
+        startupProbe:
+          timeoutSeconds: 10
+          periodSeconds: 5
