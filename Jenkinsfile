@@ -171,7 +171,7 @@ pipeline {
                         script: 'wsl.exe --exec /home/deepankar/.local/bin/minikube status -p ecom-multi-node-cluster'
                     )
                     if (clusterStatus != 0) {
-                        error('Minikube profile ecom-multi-node-cluster is unavailable in the default WSL distribution. Start and verify it from Ubuntu; Jenkins will not create a separate Windows cluster.')
+                        error('Minikube profile ecom-multi-node-cluster exists, but its status check failed. Review the preceding Minikube SSH/API errors and repair the Ubuntu cluster before retrying. Jenkins will not run minikube start or reset the cluster automatically.')
                     }
                     bat 'wsl.exe --exec /usr/local/bin/kubectl --context "%KUBERNETES_CONTEXT%" get nodes -o wide'
                 }
