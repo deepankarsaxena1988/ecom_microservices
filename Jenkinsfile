@@ -8,10 +8,24 @@ def runOnAgent(String unixCommand, String windowsCommand, Map options = [:]) {
 }
 
 def runKubectl(String unixArguments, String windowsArguments) {
-    return runOnAgent(
-        "kubectl ${unixArguments}",
-        "wsl.exe --exec /usr/local/bin/kubectl ${windowsArguments}"
-    )
+    return withCredentials([file(
+        credentialsId: 'kubernetes-kubeconfig',
+        variable: 'KUBECONFIG_FILE'
+    )]) {
+        if (isUnix()) {
+            return runOnAgent(
+                'kubectl --kubeconfig "$KUBECONFIG_FILE" ' + unixArguments,
+                ''
+            )
+        }
+        def wslKubeconfig = bat(
+            returnStdout: true,
+            script: '@echo off\nwsl.exe --exec wslpath -a "%KUBECONFIG_FILE%"'
+        ).trim()
+        return withEnv(["WSL_KUBECONFIG_FILE=${wslKubeconfig}"]) {
+            bat(script: 'wsl.exe --exec /usr/local/bin/kubectl --kubeconfig "%WSL_KUBECONFIG_FILE%" ' + windowsArguments)
+        }
+    }
 }
 
 pipeline {
@@ -197,7 +211,7 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
             }
         }
 
-        stage('Ensure Kubernetes cluster is running') {
+        stage('Validate Kubernetes access') {
             when {
                 expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
@@ -207,7 +221,7 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
                     echo "Agent identity executing deployment: ${agentIdentity}"
                     if (isUnix()) {
                         env.KUBERNETES_WORKSPACE = env.WORKSPACE
-                        echo 'Using native Minikube and kubectl on the Unix agent.'
+                        echo 'Using native kubectl with the Jenkins-managed kubeconfig; no Jenkins-owned Minikube profile is required.'
                     } else {
                         echo 'Using the default WSL distribution shown by `wsl.exe --list --verbose`.'
                         bat 'echo Windows profile: %USERPROFILE%'
@@ -224,23 +238,10 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
                             script: '@echo off\nwsl.exe --exec wslpath -a "%WORKSPACE%"'
                         ).trim()
                     }
-                    def minikubeToolStatus = runOnAgent(
-                        'minikube version',
-                        'wsl.exe --exec /home/deepankar/.local/bin/minikube version',
-                        [returnStatus: true]
+                    runKubectl(
+                        '--context "$KUBERNETES_CONTEXT" --request-timeout=30s get nodes -o wide',
+                        '--context "%KUBERNETES_CONTEXT%" --request-timeout=30s get nodes -o wide'
                     )
-                    if (minikubeToolStatus != 0) {
-                        error("Minikube could not execute for agent identity ${agentIdentity} (exit code ${minikubeToolStatus}). On Ubuntu, install minikube in /usr/local/bin and verify it is executable by the Jenkins account. On Windows, verify the configured WSL executable path. No cluster status check was performed.")
-                    }
-                    def clusterStatus = runOnAgent(
-                        'minikube status -p ecom-multi-node-cluster',
-                        'wsl.exe --exec /home/deepankar/.local/bin/minikube status -p ecom-multi-node-cluster',
-                        [returnStatus: true]
-                    )
-                    if (clusterStatus != 0) {
-                        error("Minikube status check for profile ecom-multi-node-cluster failed with exit code ${clusterStatus}. Review the preceding output for a missing profile, stopped components, or SSH/API errors. Verify the Jenkins account can access the intended profile and kubeconfig. Jenkins will not run minikube start or reset the cluster automatically.")
-                    }
-                    runKubectl('--context "$KUBERNETES_CONTEXT" get nodes -o wide', '--context "%KUBERNETES_CONTEXT%" get nodes -o wide')
                 }
             }
         }
