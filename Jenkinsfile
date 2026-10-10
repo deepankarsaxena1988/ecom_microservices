@@ -158,12 +158,15 @@ pipeline {
                         script: '@echo off\nwhoami'
                     ).trim()
                     echo "Windows identity executing deployment: ${windowsIdentity}"
-                    def wslAvailable = bat(
+                    echo "WSL distribution requested: ${params.WSL_DISTRIBUTION}"
+                    bat 'echo Windows profile: %USERPROFILE%'
+                    bat 'wsl.exe --list --verbose'
+                    def wslLaunchStatus = bat(
                         returnStatus: true,
-                        script: 'wsl.exe --list --quiet >NUL 2>&1'
-                    ) == 0
-                    if (!wslAvailable) {
-                        error("WSL is unavailable to Windows identity ${windowsIdentity}. Configure the Jenkins controller or agent running this job to use the Windows account that owns the ${params.WSL_DISTRIBUTION} distribution, then restart that service.")
+                        script: 'wsl.exe -d "%WSL_DISTRIBUTION%" --exec /bin/true'
+                    )
+                    if (wslLaunchStatus != 0) {
+                        error("WSL could not launch distribution ${params.WSL_DISTRIBUTION} for Windows identity ${windowsIdentity}. Use the exact distribution name shown by `wsl.exe --list --verbose` above, and ensure the Jenkins service has that user's WSL profile loaded.")
                     }
                     env.WSL_WORKSPACE = bat(
                         returnStdout: true,
