@@ -224,13 +224,21 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
                             script: '@echo off\nwsl.exe --exec wslpath -a "%WORKSPACE%"'
                         ).trim()
                     }
+                    def minikubeToolStatus = runOnAgent(
+                        'minikube version',
+                        'wsl.exe --exec /home/deepankar/.local/bin/minikube version',
+                        [returnStatus: true]
+                    )
+                    if (minikubeToolStatus != 0) {
+                        error("Minikube could not execute for agent identity ${agentIdentity} (exit code ${minikubeToolStatus}). On Ubuntu, install minikube in /usr/local/bin and verify it is executable by the Jenkins account. On Windows, verify the configured WSL executable path. No cluster status check was performed.")
+                    }
                     def clusterStatus = runOnAgent(
                         'minikube status -p ecom-multi-node-cluster',
                         'wsl.exe --exec /home/deepankar/.local/bin/minikube status -p ecom-multi-node-cluster',
                         [returnStatus: true]
                     )
                     if (clusterStatus != 0) {
-                        error('Minikube profile ecom-multi-node-cluster exists, but its status check failed. Review the preceding Minikube SSH/API errors and repair the Ubuntu cluster before retrying. Jenkins will not run minikube start or reset the cluster automatically.')
+                        error("Minikube status check for profile ecom-multi-node-cluster failed with exit code ${clusterStatus}. Review the preceding output for a missing profile, stopped components, or SSH/API errors. Verify the Jenkins account can access the intended profile and kubeconfig. Jenkins will not run minikube start or reset the cluster automatically.")
                     }
                     runKubectl('--context "$KUBERNETES_CONTEXT" get nodes -o wide', '--context "%KUBERNETES_CONTEXT%" get nodes -o wide')
                 }
