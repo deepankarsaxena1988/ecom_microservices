@@ -43,6 +43,18 @@ Build a Jenkins pipeline for the repository that triggers from Git commits, expo
 - Jenkins must have explicit access to Docker Desktop's Docker engine and kubeconfig; a containerized Jenkins without those mounts cannot deploy to the local cluster.
 - Database and observability containers are outside the first deployable pipeline slice until manifests, persistence, secrets, and dependencies are defined.
 
+**Local Ubuntu agent setup**
+- The pipeline selects the `docker-desktop` agent label rather than running on the Jenkins controller. On Ubuntu, use an inbound WebSocket agent running as the user who owns Docker Desktop, with one executor and this label.
+- The local agent is named `ecom-desktop-agent`. Its user service is `jenkins-ecom-agent.service`; inspect it with `systemctl --user status jenkins-ecom-agent.service` and its logs with `journalctl --user -u jenkins-ecom-agent.service`.
+- The service uses `DOCKER_HOST=unix:///home/deepankar/.docker/desktop/docker.sock` and includes `/usr/local/bin`, `/usr/bin`, `/bin`, and `/snap/bin` in `PATH`. Adapt the socket and agent paths for another Ubuntu user.
+- The agent JAR and owner-only agent secret are stored outside the repository in `~/.local/share/jenkins-agent`. Never commit the connection secret.
+- The user service starts with the user's systemd session; with lingering disabled, do not assume it runs before login or after logout. Docker Desktop must also be running.
+- Maven validation and both service builds use the existing wrapper in `ecomEureka/eureka`, pinned to Maven 3.8.7. Config Server is built with `-f ../../ecomConfigServer/pom.xml` from that directory; no system Maven installation is required.
+- Keep the Jenkins credentials `docker-hub-credentials` (username/token) and `kubernetes-kubeconfig` (file) configured. Deployment still requires an explicit approval.
+- After publishing a `Jenkinsfile` change, use **Build Now** or **Build with Parameters** to load the updated pipeline from SCM. **Replay** reuses the selected build's pipeline script, even if its checkout stage fetches a newer commit, so it can repeat an already-fixed failure.
+- After approval, the pipeline renders `kubernetes-deploy.yaml` beside each source manifest, replacing the expected `latest` image with the immutable commit/build tag. It validates and applies these rendered Deployment/Service manifests directly, avoiding a temporary `latest` rollout followed by a second image update. Source manifests are unchanged; an unexpected source image reference fails explicitly.
+- Rollout verification waits up to 600 seconds per deployment to accommodate local cluster image pulls and rolling replacement. A timeout still fails the build; inspect pod events and container logs rather than assuming the application is healthy.
+
 **Further Considerations**
 1. Choose whether Jenkins runs directly on Windows or in Docker. Direct Windows Jenkins is simpler for Docker Desktop Kubernetes access; containerized Jenkins requires Docker socket/CLI and kubeconfig/API certificate access.
 2. Decide whether every commit publishes images or only commits to an integration branch. Recommended: build/test every commit, push and offer deployment approval only for the integration branch.

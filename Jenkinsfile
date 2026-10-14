@@ -257,13 +257,27 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
                 expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
+                script {
+                    [
+                        [directory: 'ecomConfigServer', image: env.CONFIG_SERVER_IMAGE],
+                        [directory: 'ecomEureka', image: env.EUREKA_IMAGE]
+                    ].each { service ->
+                        def manifest = readFile("${service.directory}/kubernetes.yaml")
+                        def sourceImage = "image: ${env.DOCKER_NAMESPACE}/${service.image}:latest"
+                        if (!manifest.contains(sourceImage)) {
+                            error("Expected image reference ${sourceImage} in ${service.directory}/kubernetes.yaml")
+                        }
+                        writeFile file: "${service.directory}/kubernetes-deploy.yaml",
+                            text: manifest.replace(sourceImage, "image: ${env.DOCKER_NAMESPACE}/${service.image}:${env.COMMIT_TAG}")
+                    }
+                }
                 runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" --dry-run=client -f "$KUBERNETES_WORKSPACE/ecomConfigServer/kubernetes.yaml"',
-                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%KUBERNETES_WORKSPACE%/ecomConfigServer/kubernetes.yaml"'
+                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" --dry-run=client -f "$KUBERNETES_WORKSPACE/ecomConfigServer/kubernetes-deploy.yaml"',
+                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%KUBERNETES_WORKSPACE%/ecomConfigServer/kubernetes-deploy.yaml"'
                 )
                 runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" --dry-run=client -f "$KUBERNETES_WORKSPACE/ecomEureka/kubernetes.yaml"',
-                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%KUBERNETES_WORKSPACE%/ecomEureka/kubernetes.yaml"'
+                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" --dry-run=client -f "$KUBERNETES_WORKSPACE/ecomEureka/kubernetes-deploy.yaml"',
+                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%KUBERNETES_WORKSPACE%/ecomEureka/kubernetes-deploy.yaml"'
                 )
             }
         }
@@ -274,28 +288,20 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
             }
             steps {
                 runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" -f "$KUBERNETES_WORKSPACE/ecomConfigServer/kubernetes.yaml"',
-                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%KUBERNETES_WORKSPACE%/ecomConfigServer/kubernetes.yaml"'
+                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" -f "$KUBERNETES_WORKSPACE/ecomConfigServer/kubernetes-deploy.yaml"',
+                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%KUBERNETES_WORKSPACE%/ecomConfigServer/kubernetes-deploy.yaml"'
                 )
                 runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" -f "$KUBERNETES_WORKSPACE/ecomEureka/kubernetes.yaml"',
-                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%KUBERNETES_WORKSPACE%/ecomEureka/kubernetes.yaml"'
+                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" -f "$KUBERNETES_WORKSPACE/ecomEureka/kubernetes-deploy.yaml"',
+                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%KUBERNETES_WORKSPACE%/ecomEureka/kubernetes-deploy.yaml"'
                 )
                 runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" set image deployment/ecom-config-server "ecom-config-server=$DOCKER_NAMESPACE/$CONFIG_SERVER_IMAGE:$COMMIT_TAG"',
-                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" set image deployment/ecom-config-server ecom-config-server=%DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
+                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" rollout status deployment/ecom-config-server --timeout=600s',
+                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-config-server --timeout=600s'
                 )
                 runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" set image deployment/ecom-eureka "ecom-eureka=$DOCKER_NAMESPACE/$EUREKA_IMAGE:$COMMIT_TAG"',
-                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" set image deployment/ecom-eureka ecom-eureka=%DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%'
-                )
-                runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" rollout status deployment/ecom-config-server --timeout=180s',
-                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-config-server --timeout=180s'
-                )
-                runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" rollout status deployment/ecom-eureka --timeout=180s',
-                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-eureka --timeout=180s'
+                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" rollout status deployment/ecom-eureka --timeout=600s',
+                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-eureka --timeout=600s'
                 )
             }
         }

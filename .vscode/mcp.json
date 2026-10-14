@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "jenkins-mcp": {
+      "type": "stdio",
+      "command": "/home/deepankar/.local/bin/uvx",
+      "args": [
+        "mcp-jenkins",
+        "--jenkins-url=http://localhost:8080",
+        "--jenkins-username=admin",
+        "--jenkins-password=2ab06df1b0834194b9eb8cd0c9c85c4e"
+      ]
+    }
+  }
+}

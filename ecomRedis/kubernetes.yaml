@@ -1,0 +1,139 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ecom-redis-config
+  labels:
+    app: ecom-redis
+data:
+  redis.conf: |
+    port 6379
+    dir /data
+    cluster-enabled yes
+    cluster-config-file /data/nodes.conf
+    cluster-node-timeout 5000
+    save ""
+    appendonly no
+    maxmemory 128mb
+    maxmemory-policy noeviction
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecom-redis
+  labels:
+    app: ecom-redis
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: ecom-redis
+  template:
+    metadata:
+      labels:
+        app: ecom-redis
+    spec:
+      containers:
+        - name: ecom-redis
+          image: redis:7.4-alpine
+          imagePullPolicy: IfNotPresent
+          args:
+            - redis-server
+            - /etc/redis/redis.conf
+          ports:
+            - name: redis
+              containerPort: 6379
+            - name: cluster-bus
+              containerPort: 16379
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -ec
+                  - |
+                    attempts=0
+                    until [ "$(redis-cli ping)" = "PONG" ]; do
+                      attempts=$((attempts + 1))
+                      if [ "$attempts" -ge 30 ]; then
+                        echo "Redis did not start within 30 seconds" >&2
+                        exit 1
+                      fi
+                      sleep 1
+                    done
+                    slots=$(redis-cli cluster info | tr -d '\r' | sed -n 's/^cluster_slots_assigned://p')
+                    case "$slots" in
+                      0)
+                        result=$(redis-cli cluster addslotsrange 0 16383)
+                        if [ "$result" != "OK" ]; then
+                          echo "Redis slot initialization failed: $result" >&2
+                          exit 1
+                        fi
+                        ;;
+                      16384) ;;
+                      *)
+                        echo "Unexpected Redis cluster slot count: $slots" >&2
+                        exit 1
+                        ;;
+                    esac
+          startupProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 12
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -ec
+                - |
+                  info=$(redis-cli cluster info | tr -d '\r')
+                  printf '%s\n' "$info" | grep -qx 'cluster_state:ok'
+                  printf '%s\n' "$info" | grep -qx 'cluster_slots_assigned:16384'
+            periodSeconds: 5
+            timeoutSeconds: 2
+          livenessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            periodSeconds: 10
+            timeoutSeconds: 2
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: redis-config
+              mountPath: /etc/redis
+              readOnly: true
+            - name: redis-data
+              mountPath: /data
+      volumes:
+        - name: redis-config
+          configMap:
+            name: ecom-redis-config
+            items:
+              - key: redis.conf
+                path: redis.conf
+        - name: redis-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecom-redis
+  labels:
+    app: ecom-redis
+spec:
+  type: ClusterIP
+  selector:
+    app: ecom-redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+      protocol: TCP

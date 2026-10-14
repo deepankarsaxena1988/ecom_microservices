@@ -26,7 +26,7 @@ spec:
       - ReadWriteOnce
     resources:
       requests:
-        storage: 2Gi
+        storage: 1Gi
   # Shrink the InnoDB buffer pool (default assumes far more RAM than is actually available per
   # node in this minikube cluster, where each node container is hard-capped at ~3GB) so 6 MySQL
   # instances across both clusters can realistically coexist without triggering OOM kills.

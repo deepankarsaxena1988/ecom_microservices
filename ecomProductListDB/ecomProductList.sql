@@ -6,8 +6,11 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `ecomProdDB` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `ecomProdDB`;
 
+-- Invisible keys satisfy Group Replication without changing Hibernate's sequence columns.
 CREATE TABLE `product_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint DEFAULT NULL,
+  `sequence_id` bigint unsigned NOT NULL AUTO_INCREMENT INVISIBLE,
+  PRIMARY KEY (`sequence_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `product_seq` (`next_val`)
@@ -36,7 +39,9 @@ CREATE TABLE `ecom_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `ecom_product_review_id_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint DEFAULT NULL,
+  `sequence_id` bigint unsigned NOT NULL AUTO_INCREMENT INVISIBLE,
+  PRIMARY KEY (`sequence_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `ecom_product_review_id_seq` (`next_val`)

@@ -29,7 +29,7 @@ spec:
       - ReadWriteOnce
     resources:
       requests:
-        storage: 2Gi
+        storage: 1Gi
   # Keep the buffer pool small for Minikube; InnoDB Cluster requires performance_schema.
   mycnf: |
     [mysqld]
