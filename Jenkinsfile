@@ -7,6 +7,12 @@ def runOnAgent(String unixCommand, String windowsCommand, Map options = [:]) {
     return bat(options + [script: windowsCommand])
 }
 
+def runMaven(String arguments) {
+    dir('ecomEureka/eureka') {
+        runOnAgent("sh ./mvnw ${arguments}", "mvnw.cmd ${arguments}")
+    }
+}
+
 def runKubectl(String unixArguments, String windowsArguments) {
     return withCredentials([file(
         credentialsId: 'kubernetes-kubeconfig',
@@ -29,7 +35,7 @@ def runKubectl(String unixArguments, String windowsArguments) {
 }
 
 pipeline {
-    agent any
+    agent { label 'docker-desktop' }
 
     options {
         timestamps()
@@ -84,7 +90,7 @@ pipeline {
         stage('Validate tools') {
             steps {
                 runOnAgent('java -version', 'java -version')
-                runOnAgent('mvn -version', 'mvn -version')
+                runMaven('-version')
                 runOnAgent('docker version', 'docker version')
                 runOnAgent('kubectl version --client', 'kubectl version --client')
             }
@@ -92,8 +98,8 @@ pipeline {
 
         stage('Build and test') {
             steps {
-                runOnAgent('mvn -B -f ecomConfigServer/pom.xml clean verify', 'mvn -B -f ecomConfigServer/pom.xml clean verify')
-                runOnAgent('mvn -B -f ecomEureka/eureka/pom.xml clean verify', 'mvn -B -f ecomEureka/eureka/pom.xml clean verify')
+                runMaven('-B -f ../../ecomConfigServer/pom.xml clean verify')
+                runMaven('-B clean verify')
             }
             post {
                 always {
