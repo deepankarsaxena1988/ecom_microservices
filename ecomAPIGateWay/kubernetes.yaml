@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecom-api-gateway
+  namespace: default
+  labels:
+    app: ecom-api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecom-api-gateway
+  template:
+    metadata:
+      labels:
+        app: ecom-api-gateway
+    spec:
+      containers:
+        - name: ecom-api-gateway
+          image: deepankarsaxena/ecomapigateway:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 4000
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://ecom-eureka:5000/eureka
+            - name: REDIS_HOST
+              value: ecom-redis.default.svc.cluster.local
+            - name: REDIS_PORT
+              value: "6379"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:MaxRAMPercentage=70.0"
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 60
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 2
+          resources:
+            requests:
+              memory: "400Mi"
+              cpu: "100m"
+            limits:
+              memory: "600Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecom-api-gateway
+  namespace: default
+  labels:
+    app: ecom-api-gateway
+spec:
+  type: ClusterIP
+  selector:
+    app: ecom-api-gateway
+  ports:
+    - name: http
+      port: 4000
+      targetPort: http
+      protocol: TCP

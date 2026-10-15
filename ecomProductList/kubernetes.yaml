@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecom-product-list
+  namespace: default
+  labels:
+    app: ecom-product-list
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecom-product-list
+  template:
+    metadata:
+      labels:
+        app: ecom-product-list
+    spec:
+      containers:
+        - name: ecom-product-list
+          image: deepankarsaxena/ecomproductlist:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 9203
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: ecomProductList
+            - name: SERVER_PORT
+              value: "9203"
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+            - name: SPRING_CONFIG_IMPORT
+              value: configserver:http://ecom-config-server:8888
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://ecom-eureka:5000/eureka
+            - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+              value: "true"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://ecom-product-db.ecom-product-db-ns.svc.cluster.local:3306/ecomProdDB?useSSL=false&allowPublicKeyRetrieval=true&useTimezone=true&serverTimezone=UTC"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ecom-product-list-db-secret
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ecom-product-list-db-secret
+                  key: password
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:MaxRAMPercentage=70.0"
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 60
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 2
+          resources:
+            requests:
+              memory: "400Mi"
+              cpu: "100m"
+            limits:
+              memory: "600Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecom-product-list
+  namespace: default
+  labels:
+    app: ecom-product-list
+spec:
+  type: ClusterIP
+  selector:
+    app: ecom-product-list
+  ports:
+    - name: http
+      port: 9203
+      targetPort: http
+      protocol: TCP

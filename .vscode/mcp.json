@@ -9,6 +9,17 @@
         "--jenkins-username=admin",
         "--jenkins-password=2ab06df1b0834194b9eb8cd0c9c85c4e"
       ]
+    },
+     
+    "docker-toolkit": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "mcp",
+        "gateway",
+        "run"
+      ]
     }
+
   }
 }

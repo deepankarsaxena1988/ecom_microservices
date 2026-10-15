@@ -13,6 +13,15 @@ def runMaven(String arguments) {
     }
 }
 
+def deploymentServices() {
+    return [
+        [directory: 'ecomConfigServer', image: 'ecomconfigserver', deployment: 'ecom-config-server'],
+        [directory: 'ecomEureka', image: 'ecomeureka', deployment: 'ecom-eureka'],
+        [directory: 'ecomProductList', image: 'ecomproductlist', deployment: 'ecom-product-list'],
+        [directory: 'ecomAPIGateWay', image: 'ecomapigateway', deployment: 'ecom-api-gateway']
+    ]
+}
+
 def runKubectl(String unixArguments, String windowsArguments) {
     return withCredentials([file(
         credentialsId: 'kubernetes-kubeconfig',
@@ -100,6 +109,8 @@ pipeline {
             steps {
                 runMaven('-B -f ../../ecomConfigServer/pom.xml clean verify')
                 runMaven('-B clean verify')
+                runMaven('-B -f ../../ecomProductList/pom.xml clean verify')
+                runMaven('-B -f ../../ecomAPIGateWay/pom.xml clean verify')
             }
             post {
                 always {
@@ -110,27 +121,23 @@ pipeline {
 
         stage('Build Docker images') {
             steps {
-                runOnAgent(
-                    'docker build --pull -t "$DOCKER_NAMESPACE/$CONFIG_SERVER_IMAGE:$COMMIT_TAG" -t "$DOCKER_NAMESPACE/$CONFIG_SERVER_IMAGE:build-$BUILD_NUMBER" ecomConfigServer',
-                    'docker build --pull -t %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG% -t %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:build-%BUILD_NUMBER% ecomConfigServer'
-                )
-                runOnAgent(
-                    'docker build --pull -t "$DOCKER_NAMESPACE/$EUREKA_IMAGE:$COMMIT_TAG" -t "$DOCKER_NAMESPACE/$EUREKA_IMAGE:build-$BUILD_NUMBER" ecomEureka',
-                    'docker build --pull -t %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG% -t %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:build-%BUILD_NUMBER% ecomEureka'
-                )
-                runOnAgent(
-                    'docker image inspect "$DOCKER_NAMESPACE/$CONFIG_SERVER_IMAGE:$COMMIT_TAG"',
-                    'docker image inspect %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
-                )
-                runOnAgent(
-                    'docker image inspect "$DOCKER_NAMESPACE/$EUREKA_IMAGE:$COMMIT_TAG"',
-                    'docker image inspect %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%'
-                )
-                writeFile file: 'image-build.txt', text: """commit=${env.COMMIT_SHA}
-build=${env.BUILD_NUMBER}
-config-server=${env.DOCKER_NAMESPACE}/${env.CONFIG_SERVER_IMAGE}:${env.COMMIT_TAG}
-eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
-"""
+                script {
+                    def imageRecord = "commit=${env.COMMIT_SHA}\nbuild=${env.BUILD_NUMBER}\n"
+                    deploymentServices().each { service ->
+                        withEnv(["SERVICE_IMAGE=${service.image}", "SERVICE_DIRECTORY=${service.directory}"]) {
+                            runOnAgent(
+                                'docker build --pull -t "$DOCKER_NAMESPACE/$SERVICE_IMAGE:$COMMIT_TAG" -t "$DOCKER_NAMESPACE/$SERVICE_IMAGE:build-$BUILD_NUMBER" "$SERVICE_DIRECTORY"',
+                                'docker build --pull -t %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:%COMMIT_TAG% -t %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:build-%BUILD_NUMBER% "%SERVICE_DIRECTORY%"'
+                            )
+                            runOnAgent(
+                                'docker image inspect "$DOCKER_NAMESPACE/$SERVICE_IMAGE:$COMMIT_TAG"',
+                                'docker image inspect %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:%COMMIT_TAG%'
+                            )
+                        }
+                        imageRecord += "${service.deployment}=${env.DOCKER_NAMESPACE}/${service.image}:${env.COMMIT_TAG}\n"
+                    }
+                    writeFile file: 'image-build.txt', text: imageRecord
+                }
             }
             post {
                 always {
@@ -153,44 +160,35 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
                         'set +x\nprintf \'%s\' "$DOCKER_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin',
                         '@echo off\necho %DOCKER_TOKEN%| docker login --username %DOCKER_USERNAME% --password-stdin'
                     )
-                    runOnAgent(
-                        'docker push "$DOCKER_NAMESPACE/$CONFIG_SERVER_IMAGE:$COMMIT_TAG"',
-                        'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG%'
-                    )
-                    runOnAgent(
-                        'docker push "$DOCKER_NAMESPACE/$EUREKA_IMAGE:$COMMIT_TAG"',
-                        'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG%'
-                    )
-                    runOnAgent(
-                        'docker push "$DOCKER_NAMESPACE/$CONFIG_SERVER_IMAGE:build-$BUILD_NUMBER"',
-                        'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:build-%BUILD_NUMBER%'
-                    )
-                    runOnAgent(
-                        'docker push "$DOCKER_NAMESPACE/$EUREKA_IMAGE:build-$BUILD_NUMBER"',
-                        'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:build-%BUILD_NUMBER%'
-                    )
                     script {
-                        if (params.PUBLISH_LATEST) {
-                            runOnAgent(
-                                'docker tag "$DOCKER_NAMESPACE/$CONFIG_SERVER_IMAGE:$COMMIT_TAG" "$DOCKER_NAMESPACE/$CONFIG_SERVER_IMAGE:latest"',
-                                'docker tag %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:%COMMIT_TAG% %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:latest'
-                            )
-                            runOnAgent(
-                                'docker tag "$DOCKER_NAMESPACE/$EUREKA_IMAGE:$COMMIT_TAG" "$DOCKER_NAMESPACE/$EUREKA_IMAGE:latest"',
-                                'docker tag %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:%COMMIT_TAG% %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:latest'
-                            )
-                            runOnAgent(
-                                'docker push "$DOCKER_NAMESPACE/$CONFIG_SERVER_IMAGE:latest"',
-                                'docker push %DOCKER_NAMESPACE%/%CONFIG_SERVER_IMAGE%:latest'
-                            )
-                            runOnAgent(
-                                'docker push "$DOCKER_NAMESPACE/$EUREKA_IMAGE:latest"',
-                                'docker push %DOCKER_NAMESPACE%/%EUREKA_IMAGE%:latest'
-                            )
+                        deploymentServices().each { service ->
+                            withEnv(["SERVICE_IMAGE=${service.image}"]) {
+                                runOnAgent(
+                                    'docker push "$DOCKER_NAMESPACE/$SERVICE_IMAGE:$COMMIT_TAG"',
+                                    'docker push %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:%COMMIT_TAG%'
+                                )
+                                runOnAgent(
+                                    'docker push "$DOCKER_NAMESPACE/$SERVICE_IMAGE:build-$BUILD_NUMBER"',
+                                    'docker push %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:build-%BUILD_NUMBER%'
+                                )
+                                if (params.PUBLISH_LATEST) {
+                                    runOnAgent(
+                                        'docker tag "$DOCKER_NAMESPACE/$SERVICE_IMAGE:$COMMIT_TAG" "$DOCKER_NAMESPACE/$SERVICE_IMAGE:latest"',
+                                        'docker tag %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:%COMMIT_TAG% %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:latest'
+                                    )
+                                    runOnAgent(
+                                        'docker push "$DOCKER_NAMESPACE/$SERVICE_IMAGE:latest"',
+                                        'docker push %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:latest'
+                                    )
+                                }
+                            }
                         }
                     }
                     runOnAgent('docker logout', 'docker logout')
                     script {
+                        if (params.KUBERNETES_NAMESPACE != 'default') {
+                            error('These application manifests and dependency DNS names require the default namespace.')
+                        }
                         env.DOCKER_LOGIN_ATTEMPTED = 'false'
                     }
                 }
@@ -258,10 +256,7 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
             }
             steps {
                 script {
-                    [
-                        [directory: 'ecomConfigServer', image: env.CONFIG_SERVER_IMAGE],
-                        [directory: 'ecomEureka', image: env.EUREKA_IMAGE]
-                    ].each { service ->
+                    deploymentServices().each { service ->
                         def manifest = readFile("${service.directory}/kubernetes.yaml")
                         def sourceImage = "image: ${env.DOCKER_NAMESPACE}/${service.image}:latest"
                         if (!manifest.contains(sourceImage)) {
@@ -269,15 +264,41 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
                         }
                         writeFile file: "${service.directory}/kubernetes-deploy.yaml",
                             text: manifest.replace(sourceImage, "image: ${env.DOCKER_NAMESPACE}/${service.image}:${env.COMMIT_TAG}")
+                        withEnv(["SERVICE_DIRECTORY=${service.directory}"]) {
+                            runKubectl(
+                                '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" --dry-run=client -f "$KUBERNETES_WORKSPACE/$SERVICE_DIRECTORY/kubernetes-deploy.yaml"',
+                                '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%KUBERNETES_WORKSPACE%/%SERVICE_DIRECTORY%/kubernetes-deploy.yaml"'
+                            )
+                        }
                     }
                 }
+            }
+        }
+
+        stage('Validate application dependencies') {
+            when {
+                expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
+            }
+            steps {
                 runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" --dry-run=client -f "$KUBERNETES_WORKSPACE/ecomConfigServer/kubernetes-deploy.yaml"',
-                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%KUBERNETES_WORKSPACE%/ecomConfigServer/kubernetes-deploy.yaml"'
+                    '--context "$KUBERNETES_CONTEXT" -n default describe secret ecom-product-list-db-secret',
+                    '--context "%KUBERNETES_CONTEXT%" -n default describe secret ecom-product-list-db-secret'
                 )
                 runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" --dry-run=client -f "$KUBERNETES_WORKSPACE/ecomEureka/kubernetes-deploy.yaml"',
-                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" --dry-run=client -f "%KUBERNETES_WORKSPACE%/ecomEureka/kubernetes-deploy.yaml"'
+                    '--context "$KUBERNETES_CONTEXT" -n ecom-product-db-ns wait --for=jsonpath=\'{.status.cluster.status}\'=ONLINE innodbcluster/ecom-product-db --timeout=120s',
+                    '--context "%KUBERNETES_CONTEXT%" -n ecom-product-db-ns wait --for=jsonpath={.status.cluster.status}=ONLINE innodbcluster/ecom-product-db --timeout=120s'
+                )
+                runKubectl(
+                    '--context "$KUBERNETES_CONTEXT" -n ecom-product-db-ns rollout status deployment/ecom-product-db-router --timeout=120s',
+                    '--context "%KUBERNETES_CONTEXT%" -n ecom-product-db-ns rollout status deployment/ecom-product-db-router --timeout=120s'
+                )
+                runKubectl(
+                    '--context "$KUBERNETES_CONTEXT" -n default rollout status deployment/ecom-redis --timeout=120s',
+                    '--context "%KUBERNETES_CONTEXT%" -n default rollout status deployment/ecom-redis --timeout=120s'
+                )
+                runKubectl(
+                    '--context "$KUBERNETES_CONTEXT" -n default get service ecom-redis',
+                    '--context "%KUBERNETES_CONTEXT%" -n default get service ecom-redis'
                 )
             }
         }
@@ -287,22 +308,20 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
                 expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
-                runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" -f "$KUBERNETES_WORKSPACE/ecomConfigServer/kubernetes-deploy.yaml"',
-                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%KUBERNETES_WORKSPACE%/ecomConfigServer/kubernetes-deploy.yaml"'
-                )
-                runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" -f "$KUBERNETES_WORKSPACE/ecomEureka/kubernetes-deploy.yaml"',
-                    '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%KUBERNETES_WORKSPACE%/ecomEureka/kubernetes-deploy.yaml"'
-                )
-                runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" rollout status deployment/ecom-config-server --timeout=600s',
-                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-config-server --timeout=600s'
-                )
-                runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" rollout status deployment/ecom-eureka --timeout=600s',
-                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/ecom-eureka --timeout=600s'
-                )
+                script {
+                    deploymentServices().each { service ->
+                        withEnv(["SERVICE_DIRECTORY=${service.directory}", "SERVICE_DEPLOYMENT=${service.deployment}"]) {
+                            runKubectl(
+                                '--context "$KUBERNETES_CONTEXT" apply --namespace "$KUBERNETES_NAMESPACE" -f "$KUBERNETES_WORKSPACE/$SERVICE_DIRECTORY/kubernetes-deploy.yaml"',
+                                '--context "%KUBERNETES_CONTEXT%" apply --namespace "%KUBERNETES_NAMESPACE%" -f "%KUBERNETES_WORKSPACE%/%SERVICE_DIRECTORY%/kubernetes-deploy.yaml"'
+                            )
+                            runKubectl(
+                                '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" rollout status deployment/"$SERVICE_DEPLOYMENT" --timeout=600s',
+                                '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" rollout status deployment/%SERVICE_DEPLOYMENT% --timeout=600s'
+                            )
+                        }
+                    }
+                }
             }
         }
 
@@ -311,14 +330,16 @@ eureka=${env.DOCKER_NAMESPACE}/${env.EUREKA_IMAGE}:${env.COMMIT_TAG}
                 expression { env.DEPLOY_TO_LOCAL_KUBERNETES == 'true' }
             }
             steps {
-                runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" get deployments,pods,services -l app=ecom-config-server -o wide',
-                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" get deployments,pods,services -l app=ecom-config-server -o wide'
-                )
-                runKubectl(
-                    '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" get deployments,pods,services -l app=ecom-eureka -o wide',
-                    '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" get deployments,pods,services -l app=ecom-eureka -o wide'
-                )
+                script {
+                    deploymentServices().each { service ->
+                        withEnv(["SERVICE_DEPLOYMENT=${service.deployment}"]) {
+                            runKubectl(
+                                '--context "$KUBERNETES_CONTEXT" -n "$KUBERNETES_NAMESPACE" get deployments,pods,services -l app="$SERVICE_DEPLOYMENT" -o wide',
+                                '--context "%KUBERNETES_CONTEXT%" -n "%KUBERNETES_NAMESPACE%" get deployments,pods,services -l app=%SERVICE_DEPLOYMENT% -o wide'
+                            )
+                        }
+                    }
+                }
             }
         }
     }
