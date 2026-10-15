@@ -28,8 +28,9 @@ def runKubectl(String unixArguments, String windowsArguments) {
         variable: 'KUBECONFIG_FILE'
     )]) {
         if (isUnix()) {
+            def serverArgument = env.KUBERNETES_API_SERVER ? '--server "$KUBERNETES_API_SERVER" ' : ''
             return runOnAgent(
-                'kubectl --kubeconfig "$KUBECONFIG_FILE" ' + unixArguments,
+                'kubectl --kubeconfig "$KUBECONFIG_FILE" ' + serverArgument + unixArguments,
                 ''
             )
         }
@@ -38,7 +39,8 @@ def runKubectl(String unixArguments, String windowsArguments) {
             script: '@echo off\nwsl.exe --exec wslpath -a "%KUBECONFIG_FILE%"'
         ).trim()
         return withEnv(["WSL_KUBECONFIG_FILE=${wslKubeconfig}"]) {
-            bat(script: 'wsl.exe --exec /usr/local/bin/kubectl --kubeconfig "%WSL_KUBECONFIG_FILE%" ' + windowsArguments)
+            def serverArgument = env.KUBERNETES_API_SERVER ? '--server "%KUBERNETES_API_SERVER%" ' : ''
+            bat(script: 'wsl.exe --exec /usr/local/bin/kubectl --kubeconfig "%WSL_KUBECONFIG_FILE%" ' + serverArgument + windowsArguments)
         }
     }
 }
@@ -239,6 +241,19 @@ pipeline {
                             returnStdout: true,
                             script: '@echo off\nwsl.exe --exec wslpath -a "%WORKSPACE%"'
                         ).trim()
+                    }
+                    env.KUBERNETES_API_SERVER = ''
+                    if (params.KUBERNETES_CONTEXT == 'ecom-multi-node-cluster') {
+                        def apiBinding = runOnAgent(
+                            'docker port ecom-multi-node-cluster 8443/tcp',
+                            '@echo off\ndocker port ecom-multi-node-cluster 8443/tcp',
+                            [returnStdout: true]
+                        ).trim()
+                        if (!(apiBinding ==~ /127\.0\.0\.1:[0-9]+/)) {
+                            error("Expected one loopback API port for ecom-multi-node-cluster, got: ${apiBinding}. Check the Minikube profile and Docker context on this agent.")
+                        }
+                        env.KUBERNETES_API_SERVER = "https://${apiBinding}"
+                        echo "Using current Minikube API endpoint ${env.KUBERNETES_API_SERVER}; authentication and TLS trust still come from the Jenkins-managed kubeconfig."
                     }
                     runKubectl(
                         '--context "$KUBERNETES_CONTEXT" --request-timeout=30s get nodes -o wide',

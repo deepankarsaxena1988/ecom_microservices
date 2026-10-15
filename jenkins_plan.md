@@ -14,6 +14,19 @@ After manual approval, the pipeline uses the Jenkins-managed
 references require the `default` namespace, which is checked before deployment.
 Native Unix and Windows-to-WSL kubectl execution are both retained.
 
+For `ecom-multi-node-cluster`, deployment resolves the control-plane container's
+current `8443/tcp` host mapping using `docker port` on the agent. Minikube
+container recreation can change this loopback port, leaving the uploaded
+`kubernetes-kubeconfig` credential's server URL stale. All deployment kubectl
+commands override only the API server URL with the detected endpoint; they
+retain the credential's client authentication, CA trust, and TLS verification.
+The agent's Docker context must point at the engine hosting this Minikube
+profile, and its kubectl execution environment (native or WSL) must be able to
+reach the published loopback port. Other Kubernetes contexts keep their
+kubeconfig server URL unchanged. If the cluster is recreated with new
+certificates or credentials, re-upload a fresh flattened kubeconfig to Jenkins;
+endpoint discovery does not repair obsolete credentials.
+
 Deployment order, waiting for each rollout before continuing:
 
 1. Config Server
