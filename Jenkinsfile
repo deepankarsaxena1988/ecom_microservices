@@ -76,8 +76,6 @@ pipeline {
 
     environment {
         DOCKER_NAMESPACE = 'deepankarsaxena'
-        EUREKA_IMAGE = 'ecomeureka'
-        CONFIG_SERVER_IMAGE = 'ecomconfigserver'
     }
 
     stages {
@@ -186,9 +184,6 @@ pipeline {
                     }
                     runOnAgent('docker logout', 'docker logout')
                     script {
-                        if (params.KUBERNETES_NAMESPACE != 'default') {
-                            error('These application manifests and dependency DNS names require the default namespace.')
-                        }
                         env.DOCKER_LOGIN_ATTEMPTED = 'false'
                     }
                 }
@@ -221,6 +216,9 @@ pipeline {
             }
             steps {
                 script {
+                    if (params.KUBERNETES_NAMESPACE != 'default') {
+                        error('These application manifests and dependency DNS names require the default namespace.')
+                    }
                     def agentIdentity = runOnAgent('whoami', '@echo off\nwhoami', [returnStdout: true]).trim()
                     echo "Agent identity executing deployment: ${agentIdentity}"
                     if (isUnix()) {

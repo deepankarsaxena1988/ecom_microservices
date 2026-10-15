@@ -1,5 +1,57 @@
 ## Plan: Jenkins Microservices Build And Deployment
 
+### Implemented pipeline scope
+
+The current [Jenkinsfile](./Jenkinsfile) builds and tests Config Server, Eureka,
+Product List, and API Gateway with JDK 21. It builds and pushes all four Docker
+images with immutable `<commit>-<build>` and `build-<number>` tags; `latest`
+remains optional. A shared service list keeps image publishing, manifest
+rendering, deployment, and verification aligned.
+
+After manual approval, the pipeline uses the Jenkins-managed
+`kubernetes-kubeconfig` credential and explicitly selects
+`ecom-multi-node-cluster` by default. The new application manifests and DNS
+references require the `default` namespace, which is checked before deployment.
+Native Unix and Windows-to-WSL kubectl execution are both retained.
+
+Deployment order, waiting for each rollout before continuing:
+
+1. Config Server
+2. Eureka
+3. Product List
+4. API Gateway
+
+Before applying these manifests, the pipeline checks for:
+
+- `ecom-product-list-db-secret` in `default` (its `username` and `password` keys
+  must contain credentials for an existing Product DB account).
+- An ONLINE `ecom-product-db` InnoDB cluster and a ready router in
+  `ecom-product-db-ns`.
+- A ready `ecom-redis` Deployment and its Service in `default`.
+
+The pipeline does not provision Redis, databases, application credentials, or
+import Product DB data. Initialize `ecomProdDB` first and make sure Config
+Server serves the Product List development configuration. Secret inspection
+uses `describe`, which prints key sizes, not credential values.
+Docker Hub credentials remain `docker-hub-credentials`; the agent requires
+Docker registry push access and the cluster must be able to pull the images.
+
+Product List's context test uses test-scoped H2 with Config Server and Eureka
+disabled, so CI does not need a live database or registry. It does not replace
+MySQL integration testing. Gateway's optional real-Redis tests require
+`REDIS_INTEGRATION_PORT` and are skipped in the standard pipeline unless a
+dedicated local test Redis is supplied.
+
+See the [Product List instructions](./ecomProductList/README.md) and
+[Gateway instructions](./ecomAPIGateWay/README.md) for prerequisites and
+functional checks. Deployment verification waits for rollouts and lists
+resources for all four services; it does not assert API responses or HTTP 429
+behavior. The gateway's Checkout/account routes are not migrated by this
+pipeline change.
+
+The original rollout plan below is retained as historical context; its
+two-service initial scope has now been expanded as described above.
+
 Build a Jenkins pipeline for the repository that triggers from Git commits, exposes clear CI/CD phases, builds the services, rebuilds Docker images from each service Dockerfile, pushes versioned images to Docker Hub, and pauses for manual approval before deploying Kubernetes manifests to the Docker Desktop local cluster.
 
 **Steps**
