@@ -13,6 +13,14 @@ def runMaven(String arguments) {
     }
 }
 
+def pushDockerImage(String unixArguments, String windowsArguments) {
+    retry(3) {
+        timeout(time: 10, unit: 'MINUTES') {
+            runOnAgent(unixArguments, windowsArguments)
+        }
+    }
+}
+
 def deploymentServices() {
     return [
         [directory: 'ecomConfigServer', image: 'ecomconfigserver', deployment: 'ecom-config-server'],
@@ -163,11 +171,11 @@ pipeline {
                     script {
                         deploymentServices().each { service ->
                             withEnv(["SERVICE_IMAGE=${service.image}"]) {
-                                runOnAgent(
+                                pushDockerImage(
                                     'docker push "$DOCKER_NAMESPACE/$SERVICE_IMAGE:$COMMIT_TAG"',
                                     'docker push %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:%COMMIT_TAG%'
                                 )
-                                runOnAgent(
+                                pushDockerImage(
                                     'docker push "$DOCKER_NAMESPACE/$SERVICE_IMAGE:build-$BUILD_NUMBER"',
                                     'docker push %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:build-%BUILD_NUMBER%'
                                 )
@@ -176,7 +184,7 @@ pipeline {
                                         'docker tag "$DOCKER_NAMESPACE/$SERVICE_IMAGE:$COMMIT_TAG" "$DOCKER_NAMESPACE/$SERVICE_IMAGE:latest"',
                                         'docker tag %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:%COMMIT_TAG% %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:latest'
                                     )
-                                    runOnAgent(
+                                    pushDockerImage(
                                         'docker push "$DOCKER_NAMESPACE/$SERVICE_IMAGE:latest"',
                                         'docker push %DOCKER_NAMESPACE%/%SERVICE_IMAGE%:latest'
                                     )
